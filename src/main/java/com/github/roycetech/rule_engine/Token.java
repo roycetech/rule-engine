@@ -1,7 +1,7 @@
 /**
  *
  */
-package main.java.com.github.roycetech.rule_engine;
+package com.github.roycetech.rule_engine;
 
 import java.util.List;
 
@@ -10,11 +10,16 @@ import java.util.List;
  *
  */
 public class Token {
-    private Object value;
-    private int subscript;
+    private final Object value;
+    private final int subscript;
+
+    public Token(Object value, int subscript) {
+	this.value = value;
+	this.subscript = subscript;
+    }
 
     public boolean isNegative() {
-	return subscript < -1;
+	return subscript < 0;
     }
 
     /**
@@ -23,7 +28,7 @@ public class Token {
      * @return
      */
     public boolean equalsInternal(String internal) {
-	return isNegative() && getValue().equals(internal);
+	return isNegative() && this.value.equals(internal);
     }
 
     /**
@@ -38,36 +43,13 @@ public class Token {
      */
     public boolean accepts(List<Object> scenario) {
 	if (isNegative()) {
-	    return scenario.contains(getValue());
+	    return scenario.contains(this.value);
 	}
-	return scenario.get(getSubscript()).equals(getValue());
+	return scenario.get(this.subscript).equals(this.value);
     }
 
-    /**
-     * @return the value
-     */
-    public Object getValue() {
-	return value;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setValue(Object value) {
-	this.value = value;
-    }
-
-    /**
-     * @return the subscript
-     */
-    public int getSubscript() {
-	return subscript;
-    }
-
-    /**
-     * @param subscript the subscript to set
-     */
-    public void setSubscript(int subscript) {
-	this.subscript = subscript;
+    @Override
+    public String toString() {
+	return String.valueOf(this.value) + '[' + this.subscript + ']';
     }
 }

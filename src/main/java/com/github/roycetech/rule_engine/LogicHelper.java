@@ -4,7 +4,7 @@
  * the Capitalize represent the object that contains the value and the
  * subscript.
  */
-package main.java.com.github.roycetech.rule_engine;
+package com.github.roycetech.rule_engine;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,10 +32,10 @@ public class LogicHelper {
 	OPPOSITE.put(FALSE, TRUE);
     }
 
-    static final Map<String, String> LOGIC_PRIMARY_RESULT = new HashMap<>();
+    static final Map<Operator, String> LOGIC_PRIMARY_RESULT = new HashMap<>();
     static {
-	LOGIC_PRIMARY_RESULT.put("and", FALSE);
-	LOGIC_PRIMARY_RESULT.put("or", TRUE);
+	LOGIC_PRIMARY_RESULT.put(Operator.AND, FALSE);
+	LOGIC_PRIMARY_RESULT.put(Operator.OR, TRUE);
     }
 
     /**
@@ -45,7 +45,7 @@ public class LogicHelper {
      * @operation :and or :or.
      */
     public String performLogical(List<Object> scenario, Token left, Token right,
-	    String operation) {
+	    Operator operation) {
 
 	final String evaluated = isBothInternalS(left, right, operation);
 
@@ -63,9 +63,7 @@ public class LogicHelper {
 	    return String.valueOf(left.accepts(scenario));
 	}
 
-	final String methodName = "evaluate"
-		+ operation.substring(0, 1).toUpperCase()
-		+ operation.substring(1);
+	final String methodName = "evaluate" + operation.toWord();
 	Method method;
 	try {
 	    method = getClass().getDeclaredMethod(methodName, List.class,
@@ -105,8 +103,8 @@ public class LogicHelper {
      * @operation symbol either: and or:or
      */
     private String isBothInternalS(Token left, Token right,
-	    final String operation) {
-	final String defaultResult = LOGIC_PRIMARY_RESULT.get(operation);
+	    final Operator operator) {
+	final String defaultResult = LOGIC_PRIMARY_RESULT.get(operator);
 
 	if (left.equalsInternal(defaultResult)
 		|| right.equalsInternal(defaultResult)) {
