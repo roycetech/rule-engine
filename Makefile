@@ -5,6 +5,8 @@ help:
 	@echo "make -s version-set - display the current artifact version"
 	@echo "make -s version-get VERSION=<new version> - Update version number to a new one."
 	@echo "make -s clean - delete generated files"
+	@echo "make -s verify - run tests and check javadocs"
+	@echo "make -s release - release to maven central"
 	@echo "-s option hides the Make invocation command (@echo)."
 
 init:
@@ -23,8 +25,14 @@ version-get:
 version-set:
 	mvn versions:set -DnewVersion=${VERSION}
 
+verify:
+	mvn verify -Dgpg.skip
+
+release:
+	mvn clean deploy -P release
+
 clean:
 	rm -rf target/
 	rm -rf bin/
 
-.PHONY: help test init clean run version-set version-get
+.PHONY: help test init clean run version-set version-get release verify

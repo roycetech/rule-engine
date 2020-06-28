@@ -18,11 +18,13 @@ public class Rule {
 
     /**
      *
-     * Instantiate a rule with the given clause. <br/>
-     * <br/>
-     * <b>Parameter Example:</b><br/>
-     * Visible: Proposed|Approved<br/>
-     * <br/>
+     * Instantiate a rule with the given clause. <br>
+     * <br>
+     * <b>Parameter Example:</b><br>
+     * Visible: Proposed|Approved<br>
+     * <br>
+     *
+     * @param rules the outcome to clause mapping.
      */
     public Rule(Map<String, String> rules) {
 

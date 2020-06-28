@@ -39,10 +39,14 @@ public class LogicHelper {
     }
 
     /**
-     * @scenario list of scenario tokens.
-     * @left left left token object.
-     * @right right right token object.
-     * @operation :and or :or.
+     * Perform logical operation.
+     *
+     * @param scenario  the list of scenario tokens.
+     * @param left      the left token object.
+     * @param right     the right token object.
+     * @param operation either AND or OR.
+     *
+     * @return the result of the logical operation.
      */
     public String performLogical(List<Object> scenario, Token left, Token right,
 	    Operator operation) {
