@@ -3,12 +3,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.roycetech.textprocessor</groupId>
+	<groupId>com.github.roycetech.rule-engine</groupId>
 	<artifactId>rule-engine</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>rule-engine</name>
-	<description>A simple rule engine that can evaluate text expressions using the basic logic operators 'and', 'or', 'not', and parenthesis.</description>
+	<description>
+	   A simple rule engine that can evaluate text expressions using the basic 
+	   logic operators 'and', 'or', 'not', and parenthesis.
+	</description>
 	<url>https://github.com/roycetech/rule-engine</url>
 
 	<licenses>
@@ -27,7 +30,7 @@
 
 	<scm>
 		<connection>scm:git:git://github.com/roycetech/rule-engine.git</connection>
-		<developerConnection>scm:git:ssh://github.com:roycetech/array-utils.git</developerConnection>
+		<developerConnection>scm:git:ssh://github.com:roycetech/rule-engine.git</developerConnection>
 		<url>https://github.com/roycetech/rule-engine/tree/master</url>
 	</scm>
 

@@ -1,6 +1,7 @@
 # rule-engine
 
-A simple rule engine that can evaluate text expressions using the basic logic operators a'and', 'or', 'not', and parenthesis.
+A simple rule engine that can evaluate text expressions using the basic logic
+ operators 'and', 'or', 'not', and parenthesis.
 
 [![Build Status](https://travis-ci.com/roycetech/rule-engine.svg?branch=master)](https://travis-ci.com/roycetech/rule-engine)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/TODO/test_coverage)](https://codeclimate.com/github/roycetech/rule-engine/test_coverage)
