@@ -1,0 +1,18 @@
+---
+language: java
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+# without this stage, mvn install will always run regardless of what you put
+# under the script stage.
+install: mvn install -Dmaven.test.skip=true -Dgpg.skip
+
+script: make test
+
+after_script:
+  - JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco
+
+  - ./cc-test-reporter upload-coverage
