@@ -10,7 +10,8 @@ import org.junit.Test;
 public class TokenTest {
 
     @Test
-    public final void testIsNegative() {
+    public final void testIsNegative()
+    {
 	// @formatter:off
 	final Object[][] testData = new Object[][] {
 	    { new Token(null, -1), true },
@@ -27,7 +28,8 @@ public class TokenTest {
     }
 
     @Test
-    public final void testEqualsInternal() {
+    public final void testEqualsInternal()
+    {
 	// @formatter:off
 	final Object[][] testData = new Object[][] {
 	    { new Token("1", -1),               LogicHelper.FALSE, false },
@@ -58,7 +60,8 @@ public class TokenTest {
     }
 
     @Test
-    public final void testAccepts() {
+    public final void testAccepts()
+    {
 	// @formatter:off
 	final Object[][] testData = new Object[][] {
 	    { new Token("apple", -1),  new Object[] { "apple" }, true },
@@ -79,7 +82,8 @@ public class TokenTest {
     }
 
     @Test
-    public final void testToString() {
+    public final void testToString()
+    {
 	assertEquals("apple[-1]", new Token("apple", -1).toString());
     }
 }

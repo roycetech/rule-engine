@@ -23,7 +23,8 @@ public class RuleProcessor {
      */
     private final Map<String, ElementConverter<?>> tokenConverters;
 
-    RuleProcessor(Rule rule, Map<String, ElementConverter<?>> tokenConverters) {
+    RuleProcessor(final Rule rule,
+	    final Map<String, ElementConverter<?>> tokenConverters) {
 	this.rule = rule;
 	this.tokenConverters = tokenConverters;
     }
@@ -32,7 +33,7 @@ public class RuleProcessor {
      * @param scenario    current scenario.
      * @param caseFixture current test case fixture.
      */
-    Boolean[] evaluate(List<Object> scenario)
+    Boolean[] evaluate(final List<Object> scenario)
     {
 	final List<Boolean> retval = new ArrayList<>();
 
@@ -40,10 +41,10 @@ public class RuleProcessor {
 	    retval.add(checkScenarioAgainstOutcome(scenario, outcome));
 	}
 
-	return retval.toArray(new Boolean[retval.size()]);
+	return retval.toArray(new Boolean[0]);
     }
 
-    private boolean checkScenarioAgainstOutcome(List<Object> scenario,
+    private boolean checkScenarioAgainstOutcome(final List<Object> scenario,
 	    final String targetOutcome)
     {
 

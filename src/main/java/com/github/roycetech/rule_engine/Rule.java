@@ -12,21 +12,23 @@ import java.util.Set;
  *
  * @author royce
  */
+@SuppressWarnings("PMD.ShortClassName")
 public class Rule {
 
+    /**
+     * Contains the outcome to rule-clause hash.
+     */
     private final Map<String, String> outcomeClauseHash;
 
     /**
-     *
      * Instantiate a rule with the given clause. <br>
-     * <br>
      * <b>Parameter Example:</b><br>
      * Visible: Proposed|Approved<br>
      * <br>
      *
      * @param rules the outcome to clause mapping.
      */
-    public Rule(Map<String, String> rules) {
+    public Rule(final Map<String, String> rules) {
 
 	if (rules.isEmpty()) {
 	    throw new IllegalArgumentException("Must not have empty rules");
@@ -43,7 +45,8 @@ public class Rule {
      * @param clause dynamic, can be a String or an Array, blech.
      * @return
      */
-    static String sanitize(String clause) {
+    static String sanitize(final String clause)
+    {
 	if (clause.getClass().isArray()) {
 	    return clause;
 	}
@@ -56,7 +59,8 @@ public class Rule {
 	return Rule.removeSpaces(cleaner, '!').strip();
     }
 
-    int getSize() {
+    int getSize()
+    {
 	return getOutcomes().size();
     }
 
@@ -66,7 +70,8 @@ public class Rule {
      * @param string    rule clause.
      * @param separator rule clause token.
      */
-    static String removeSpaces(final String token, char separator) {
+    static String removeSpaces(final String token, final char separator)
+    {
 	return token.replaceAll("\\s*" + separator + "\\s*",
 		String.valueOf(separator));
     }
@@ -74,7 +79,8 @@ public class Rule {
     /**
      * @return the outcomes list.
      */
-    Set<String> getOutcomes() {
+    Set<String> getOutcomes()
+    {
 	return this.outcomeClauseHash.keySet();
     }
 
@@ -83,7 +89,8 @@ public class Rule {
      *
      * @return the rule clause.
      */
-    public String getClause(String outcome) {
+    public String getClause(final String outcome)
+    {
 	return this.outcomeClauseHash.get(outcome);
     }
 }

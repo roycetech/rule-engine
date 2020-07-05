@@ -54,7 +54,10 @@ public class RuleEvaluator {
     private static final String OPERATORS = Operator.NOT
 	    + String.valueOf(Operator.OR) + Operator.AND;
 
-    private static Map<Class<? extends Object>, ElementConverter<?>> DEFAULT_CONVERT_HASH;
+    /**
+     * Converters for the different supported data types.
+     */
+    private static final Map<Class<? extends Object>, ElementConverter<?>> DEFAULT_CONVERT_HASH;
     static {
 	DEFAULT_CONVERT_HASH = new HashMap<>();
 
@@ -70,7 +73,8 @@ public class RuleEvaluator {
      *
      * @param tokenConverters token to converter mapping.
      */
-    public RuleEvaluator(Map<String, ElementConverter<?>> tokenConverters) {
+    public RuleEvaluator(
+	    final Map<String, ElementConverter<?>> tokenConverters) {
 	this.tokenConverters = tokenConverters;
 
 	this.stackOperations = new Stack<>();
@@ -85,7 +89,7 @@ public class RuleEvaluator {
      *                   be a string or an array of objects.
      * @since 0.3.0
      */
-    void parse(Object expression)
+    void parse(final Object expression)
     {
 	/* cleaning stacks */
 	this.stackOperations.clear();
@@ -112,14 +116,13 @@ public class RuleEvaluator {
     /**
      * Evaluates once parsed math expression with "var" variable included.
      *
-     * @param scenario           List of values to evaluate against the rule
-     *                           expression.
-     * @param rule_token_convert mapping of rule tokens to converter.
+     * @param scenario List of values to evaluate against the rule expression.
      * @return <code>String</code> representation of the result
      */
-    public Boolean evaluate(List<Object> scenario)
+    public Boolean evaluate(final List<Object> scenario)
     {
-	if (this.stackRPN.size() == 1) {
+	final boolean oneLeft = this.stackRPN.size() == 1;
+	if (oneLeft) {
 	    return evaluateOneRpn(scenario);
 	}
 
@@ -147,7 +150,7 @@ public class RuleEvaluator {
     }
 
     /** @param tokenChar token. */
-    private void shuntInternal(String token)
+    private void shuntInternal(final String token)
     {
 	final char tokenChar = token.charAt(0);
 
@@ -191,7 +194,7 @@ public class RuleEvaluator {
     /**
      * @param scenario to evaluate against the rule expression.
      */
-    private Boolean evaluateOneRpn(List<Object> scenario)
+    private Boolean evaluateOneRpn(final List<Object> scenario)
     {
 	final String single = this.stackRPN.peek();
 	final ElementConverter<?> converter = DEFAULT_CONVERT_HASH
@@ -215,7 +218,8 @@ public class RuleEvaluator {
 
 	evaluateStackRpn(stackRPNClone, scenario);
 
-	if (this.stackAnswer.size() > 1) {
+	final boolean multiAnswers = this.stackAnswer.size() > 1;
+	if (multiAnswers) {
 	    throw new RuleEvaluatorException("Some operator is missing");
 	}
 
@@ -228,7 +232,7 @@ public class RuleEvaluator {
      *
      * @param string token to check for subscript.
      */
-    static int extractSubscript(Object token)
+    static int extractSubscript(final Object token)
     {
 	if (token.getClass().isArray()) {
 	    return -1;
@@ -251,7 +255,8 @@ public class RuleEvaluator {
     }
 
     /** evaluating the RPN expression */
-    private void evaluateStackRpn(Stack<String> stackRpn, List<Object> scenario)
+    private void evaluateStackRpn(final Stack<String> stackRpn,
+	    final List<Object> scenario)
     {
 	String token;
 	while (!stackRpn.isEmpty()) {
@@ -264,7 +269,8 @@ public class RuleEvaluator {
 	}
     }
 
-    private void evaluateOperator(List<Object> scenario, char tokenChar)
+    private void evaluateOperator(final List<Object> scenario,
+	    final char tokenChar)
     {
 	if (Operator.NOT.getSymbol() == tokenChar) {
 	    evaluateMultiNot(scenario);
@@ -276,7 +282,7 @@ public class RuleEvaluator {
     /**
      * @param scenario List of values to evaluate against the rule expression.
      */
-    private void evaluateMultiNot(List<Object> scenario)
+    private void evaluateMultiNot(final List<Object> scenario)
     {
 	final String latest = this.stackAnswer.pop().trim();
 	String answer;
@@ -292,7 +298,8 @@ public class RuleEvaluator {
 	this.stackAnswer.add(formatInternalResult(answer));
     }
 
-    private String evaluateNonInternal(List<Object> scenario, String latest)
+    private String evaluateNonInternal(final List<Object> scenario,
+	    final String latest)
     {
 	final Token token = new Token(latest);
 	final ElementConverter<?> converter = DEFAULT_CONVERT_HASH
@@ -304,9 +311,10 @@ public class RuleEvaluator {
      * Returns true if answer starts with *, *true if answer is true, same goes
      * for false.
      */
-    private String formatInternalResult(String answer)
+    private String formatInternalResult(final String answer)
     {
-	if (answer.charAt(0) == '*') {
+	final boolean isInternal = answer.charAt(0) == '*';
+	if (isInternal) {
 	    return answer;
 	}
 	return String.format("*%s", answer);
@@ -318,7 +326,8 @@ public class RuleEvaluator {
      * @param rule_token_convert token to converter map.
      * @param operator           OR/AND.
      */
-    private void evaluateMulti(List<Object> scenario, Operator operator)
+    private void evaluateMulti(final List<Object> scenario,
+	    final Operator operator)
     {
 	/* Convert 'nil' to nil. */
 	final List<Object> formattedScenario = scenario.stream()
@@ -343,15 +352,9 @@ public class RuleEvaluator {
 
 	    this.stackAnswer.add(formatInternalResult(answer));
 
-	} catch (final SecurityException e1) {
-	    RuleEvaluator.LOGGER.error(e1.getMessage(), e1);
-	} catch (final NoSuchMethodException e1) {
-	    RuleEvaluator.LOGGER.error(e1.getMessage(), e1);
-	} catch (final IllegalArgumentException e) {
-	    RuleEvaluator.LOGGER.error(e.getMessage(), e);
-	} catch (final IllegalAccessException e) {
-	    RuleEvaluator.LOGGER.error(e.getMessage(), e);
-	} catch (final InvocationTargetException e) {
+	} catch (final SecurityException | NoSuchMethodException
+		| IllegalArgumentException | IllegalAccessException
+		| InvocationTargetException e) {
 	    RuleEvaluator.LOGGER.error(e.getMessage(), e);
 	}
     }
@@ -372,7 +375,7 @@ public class RuleEvaluator {
 	return nextValueDefault((String) lastAnswer);
     }
 
-    private Token nextValueDefault(String tokenString)
+    private Token nextValueDefault(final String tokenString)
     {
 	final Token token = new Token(tokenString);
 

@@ -7,7 +7,8 @@ public class FloatConverter implements ElementConverter<Float> {
 
     /** {@inheritDoc} */
     @Override
-    public Float convert(final String string) {
+    public Float convert(final String string)
+    {
 	return Float.parseFloat(string);
     }
 }

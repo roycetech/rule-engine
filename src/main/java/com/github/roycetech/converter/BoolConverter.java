@@ -7,7 +7,8 @@ public class BoolConverter implements ElementConverter<Boolean> {
 
     /** {@inheritDoc} */
     @Override
-    public Boolean convert(final String string) {
+    public Boolean convert(final String string)
+    {
 	return Boolean.parseBoolean(string);
     }
 }

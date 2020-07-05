@@ -8,6 +8,7 @@ package com.github.roycetech.rule_engine;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +33,14 @@ public class LogicHelper {
 	OPPOSITE.put(FALSE, TRUE);
     }
 
-    static final Map<Operator, String> LOGIC_PRIMARY_RESULT = new HashMap<>();
+    /**
+     * Defines the primary result for a logical operator.
+     */
+    static final EnumMap<Operator, String> PRIMARY_RESULT = new EnumMap<>(
+	    Operator.class);
     static {
-	LOGIC_PRIMARY_RESULT.put(Operator.AND, FALSE);
-	LOGIC_PRIMARY_RESULT.put(Operator.OR, TRUE);
+	PRIMARY_RESULT.put(Operator.AND, FALSE);
+	PRIMARY_RESULT.put(Operator.OR, TRUE);
     }
 
     /**
@@ -48,8 +53,8 @@ public class LogicHelper {
      *
      * @return the result of the logical operation.
      */
-    public String performLogical(List<Object> scenario, Token left, Token right,
-	    Operator operation)
+    public String performLogical(final List<Object> scenario, final Token left,
+	    final Token right, final Operator operation)
     {
 
 	final String evaluated = isBothInternalS(left, right, operation);
@@ -58,8 +63,7 @@ public class LogicHelper {
 	    return evaluated;
 	}
 
-	final String defaultReturn = Operator.AND.equals(operation) ? TRUE
-		: FALSE;
+	final String defaultReturn = Operator.AND == operation ? TRUE : FALSE;
 
 	if (left.equalsInternal(defaultReturn)) {
 	    return String.valueOf(right.accepts(scenario));
@@ -83,13 +87,9 @@ public class LogicHelper {
 	}
     }
 
-    static boolean isInternal(String token)
+    static boolean isInternal(final String token)
     {
-	if (TRUE.equals(token) || FALSE.equals(token)) {
-	    return true;
-	}
-
-	return false;
+	return TRUE.equals(token) || FALSE.equals(token);
     }
 
 //private methods ==========================================================
@@ -115,14 +115,14 @@ public class LogicHelper {
     }
 
     /**
-     * @left hash containing token and subscript
-     * @right hash containing token and subscript
-     * @operation symbol either: and or:or
+     * @param left     token.
+     * @param right    token.
+     * @param operator either 'and' or 'or' operator.
      */
-    private String isBothInternalS(Token left, Token right,
+    private String isBothInternalS(final Token left, final Token right,
 	    final Operator operator)
     {
-	final String defaultResult = LOGIC_PRIMARY_RESULT.get(operator);
+	final String defaultResult = PRIMARY_RESULT.get(operator);
 
 	if (left.equalsInternal(defaultResult)
 		|| right.equalsInternal(defaultResult)) {
@@ -146,7 +146,8 @@ public class LogicHelper {
      * @return
      */
     @SuppressWarnings("unused")
-    private boolean evaluateAnd(List<Object> scenario, Token left, Token right)
+    private boolean evaluateAnd(final List<Object> scenario, final Token left,
+	    final Token right)
     {
 	final boolean leftEval = left.accepts(scenario);
 
@@ -166,7 +167,8 @@ public class LogicHelper {
      * @return
      */
     @SuppressWarnings("unused")
-    private boolean evaluateOr(List<Object> scenario, Token left, Token right)
+    private boolean evaluateOr(final List<Object> scenario, final Token left,
+	    final Token right)
     {
 	final boolean leftEval = left.accepts(scenario);
 	if (leftEval) {

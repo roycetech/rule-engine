@@ -9,7 +9,8 @@ public class StrConverter implements ElementConverter<String> {
 
     /** {@inheritDoc} */
     @Override
-    public String convert(final String string) {
+    public String convert(final String string)
+    {
 	if (string == null) {
 	    return null;
 	}

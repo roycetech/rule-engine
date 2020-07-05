@@ -13,8 +13,8 @@ public interface ElementConverter<T> {
     /**
      * Convert string to correct data type.
      *
-     * @param <T>    Scenario element type.
      * @param string element to convert.
+     * @return the string converted to it's actual type.
      */
     T convert(String string);
 

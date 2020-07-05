@@ -1,5 +1,7 @@
 package com.github.roycetech.rule_engine;
 
+import java.util.Locale;
+
 /** */
 enum Operator {
     /** */
@@ -45,7 +47,7 @@ enum Operator {
     public static Operator fromString(final String operator)
     {
 	for (final Operator nextOper : Operator.values()) {
-	    if (operator.trim().charAt(0) == nextOper.symbol) {
+	    if (operator.charAt(0) == nextOper.symbol) {
 		return nextOper;
 	    }
 	}
@@ -83,7 +85,7 @@ enum Operator {
      */
     public String toWord()
     {
-	return name().substring(0, 1).toUpperCase()
-		+ name().substring(1).toLowerCase();
+	return name().substring(0, 1).toUpperCase(Locale.getDefault())
+		+ name().substring(1).toLowerCase(Locale.getDefault());
     }
 }
