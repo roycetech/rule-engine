@@ -49,7 +49,8 @@ public class LogicHelper {
      * @return the result of the logical operation.
      */
     public String performLogical(List<Object> scenario, Token left, Token right,
-	    Operator operation) {
+	    Operator operation)
+    {
 
 	final String evaluated = isBothInternalS(left, right, operation);
 
@@ -81,6 +82,15 @@ public class LogicHelper {
 	}
     }
 
+    static boolean isInternal(String token)
+    {
+	if (TRUE.equals(token) || FALSE.equals(token)) {
+	    return true;
+	}
+
+	return false;
+    }
+
 //private methods ==========================================================
 
     /**
@@ -89,7 +99,8 @@ public class LogicHelper {
      * @token Input <code>String</code> token
      * @return <code>boolean</code> output
      */
-    boolean isOpenBracket(final char token) {
+    static boolean isOpenBracket(final char token)
+    {
 	return token == '(';
     }
 
@@ -97,7 +108,8 @@ public class LogicHelper {
      * Check if the token is closing bracket. # * # * @param token Input
      * <code>String</code> token # * @return <code>boolean</code> output #
      */
-    boolean isCloseBracket(final char token) {
+    static boolean isCloseBracket(final char token)
+    {
 	return token == ')';
     }
 
@@ -107,7 +119,8 @@ public class LogicHelper {
      * @operation symbol either: and or:or
      */
     private String isBothInternalS(Token left, Token right,
-	    final Operator operator) {
+	    final Operator operator)
+    {
 	final String defaultResult = LOGIC_PRIMARY_RESULT.get(operator);
 
 	if (left.equalsInternal(defaultResult)
@@ -132,8 +145,8 @@ public class LogicHelper {
      * @return
      */
     @SuppressWarnings("unused")
-    private boolean evaluateAnd(List<Object> scenario, Token left,
-	    Token right) {
+    private boolean evaluateAnd(List<Object> scenario, Token left, Token right)
+    {
 	final boolean leftEval = left.accepts(scenario);
 
 	if (!leftEval) {
@@ -152,7 +165,8 @@ public class LogicHelper {
      * @return
      */
     @SuppressWarnings("unused")
-    private boolean evaluateOr(List<Object> scenario, Token left, Token right) {
+    private boolean evaluateOr(List<Object> scenario, Token left, Token right)
+    {
 	final boolean leftEval = left.accepts(scenario);
 	if (leftEval) {
 	    return true;

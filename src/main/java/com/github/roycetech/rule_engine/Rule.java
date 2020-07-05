@@ -56,8 +56,8 @@ public class Rule {
 	return Rule.removeSpaces(cleaner, '!').strip();
     }
 
-    int size() {
-	return outcomes().size();
+    int getSize() {
+	return getOutcomes().size();
     }
 
     /**
@@ -74,7 +74,7 @@ public class Rule {
     /**
      * @return the outcomes list.
      */
-    Set<String> outcomes() {
+    Set<String> getOutcomes() {
 	return this.outcomeClauseHash.keySet();
     }
 
@@ -83,7 +83,7 @@ public class Rule {
      *
      * @return the rule clause.
      */
-    public String clause(String outcome) {
+    public String getClause(String outcome) {
 	return this.outcomeClauseHash.get(outcome);
     }
 }
