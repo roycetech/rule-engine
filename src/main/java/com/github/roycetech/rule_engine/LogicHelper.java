@@ -58,7 +58,8 @@ public class LogicHelper {
 	    return evaluated;
 	}
 
-	final String defaultReturn = "and".equals(operation) ? TRUE : FALSE;
+	final String defaultReturn = Operator.AND.equals(operation) ? TRUE
+		: FALSE;
 
 	if (left.equalsInternal(defaultReturn)) {
 	    return String.valueOf(right.accepts(scenario));
