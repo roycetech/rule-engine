@@ -71,12 +71,6 @@ public enum Operator {
 	return this.symbol;
     }
 
-//    /** String representation of this object. */
-//    @Override
-//    public String toString() {
-//	return String.valueOf(this.operator);
-//    }
-
     /**
      * Converts this operator to start with capital letter follow by lower case
      * for dynamic method invocation.

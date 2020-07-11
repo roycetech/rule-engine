@@ -16,56 +16,78 @@ import com.github.roycetech.rule_engine.Operator;
 public class Shunter {
 
     /** Temporary stack that holds operators, functions and brackets. */
-    private final Deque<String> stackOperations;
+    private final Deque<Object> stackOperations;
 
     /** Stack for holding expression converted to reversed polish notation. */
-    private final Deque<String> stackRPN;
+    private final Deque<Object> stackRPN;
 
-//    /** Stack for holding the calculations result. */
-//    private final Deque<String> stackAnswer;
-
-    public Shunter(final Deque<String> stackOperations,
-	    final Deque<String> stackRPN) {
+    public Shunter(final Deque<Object> stackOperations,
+	    final Deque<Object> stackRPN) {
 	this.stackOperations = stackOperations;
 	this.stackRPN = stackRPN;
     }
 
-    /** @param tokenChar token. */
-    public void shuntInternal(final String token)
+    /**
+     * For the Deque version, stackRPN has to be in reversed order already.
+     *
+     * @param tokenChar token.
+     */
+    public void shuntInternal(final Object token)
     {
-	final char tokenChar = token.charAt(0);
+	final String tokenString = token.toString();
+	final char tokenChar = tokenString.charAt(0);
 
 	if (LogicHelper.isOpenBracket(tokenChar)) {
 	    this.stackOperations.add(token);
 	} else if (LogicHelper.isCloseBracket(tokenChar)) {
 	    shuntClose();
-	} else if (LogicHelper.isOperator(token)) {
+	} else if (LogicHelper.isOperator(tokenString)) {
 	    shuntOperator(token);
 	} else {
-	    this.stackRPN.add(token);
+	    this.stackRPN.push(token);
 	}
     }
 
     private void shuntClose()
     {
 	while (!this.stackOperations.isEmpty() && !LogicHelper.isOpenBracket(
-		this.stackOperations.peekLast().trim().charAt(0))) {
-	    this.stackRPN.add(this.stackOperations.pop());
+		this.stackOperations.peekLast().toString().trim().charAt(0))) {
+	    this.stackRPN.add(this.stackOperations.removeLast());
 	}
-	this.stackOperations.pop();
+	this.stackOperations.removeLast();
     }
 
-    private void shuntOperator(final String token)
+    /**
+     * @param token can be the traditional String or an array.
+     */
+    private void shuntOperator(final Object token)
     {
 	while (!this.stackOperations.isEmpty()
-		&& LogicHelper
-			.isOperator(this.stackOperations.peekLast().trim())
-		&& Operator.fromString(token).getPrecedence() <= Operator
-			.fromString(this.stackOperations.peekLast())
-			.getPrecedence()) {
-	    this.stackRPN.add(this.stackOperations.pop());
+		&& LogicHelper.isOperator(
+			this.stackOperations.peekLast().toString().trim())
+		&& Operator.fromString(token.toString())
+			.getPrecedence() <= Operator.fromString(
+				this.stackOperations.peekLast().toString())
+				.getPrecedence()) {
+	    this.stackRPN.add(this.stackOperations.removeLast());
 	}
 	this.stackOperations.add(token);
+    }
+
+    /**
+     * @return the stackOperations. For testing purpose only.
+     */
+    Deque<Object> getStackOperations()
+    {
+	return stackOperations;
+    }
+
+    /**
+     * @return the stackRPN. For testing purpose only.
+     */
+    Deque<Object> getStackRPN()
+    {
+	return stackRPN;
     }
 
 }

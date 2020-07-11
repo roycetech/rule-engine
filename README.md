@@ -12,6 +12,10 @@ A simple rule engine that can evaluate text expressions using the basic logic
 
 `make test`
 
+### Testing
+
+Preference was put on the LogicChecker example, available in another language.
+
 
 ### Release process
 

@@ -3,11 +3,11 @@ package com.github.roycetech.converter;
 /**
  * @author Royce Remulla
  */
-public class FloatConverter implements ElementConverter<Float> {
+public class FloatConverter implements ElementConverter {
 
     /** {@inheritDoc} */
     @Override
-    public Float convert(final String string)
+    public Object convert(final String string)
     {
 	return Float.parseFloat(string);
     }

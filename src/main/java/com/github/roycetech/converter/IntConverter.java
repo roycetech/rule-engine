@@ -3,11 +3,11 @@ package com.github.roycetech.converter;
 /**
  * @author Royce Remulla
  */
-public class IntConverter implements ElementConverter<Integer> {
+public class IntConverter implements ElementConverter {
 
     /** {@inheritDoc} */
     @Override
-    public Integer convert(final String string)
+    public Object convert(final String string)
     {
 	return Integer.parseInt(string);
     }

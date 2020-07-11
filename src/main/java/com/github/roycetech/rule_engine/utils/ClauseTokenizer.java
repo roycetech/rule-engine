@@ -20,8 +20,7 @@ public final class ClauseTokenizer {
      * @clause - rule clause to be tokenized
      * @tokens - the tokens to be used to break down the clause.
      */
-    public static List<String> tokenize(final String clause,
-	    final String tokens)
+    public static Object[] tokenize(final String clause, final String tokens)
     {
 	final StringTokenizer stringTokenizer = new StringTokenizer(clause,
 		tokens, true);
@@ -33,7 +32,7 @@ public final class ClauseTokenizer {
 	    final String token = stringTokenizer.nextToken().trim();
 	    retval.add(token);
 	}
-	return retval;
+	return retval.toArray(new Object[0]);
     }
 
 }

@@ -3,11 +3,11 @@ package com.github.roycetech.converter;
 /**
  * @author Royce Remulla
  */
-public class DblConverter implements ElementConverter<Double> {
+public class DblConverter implements ElementConverter {
 
     /** {@inheritDoc} */
     @Override
-    public Double convert(final String string)
+    public Object convert(final String string)
     {
 	return Double.parseDouble(string);
     }

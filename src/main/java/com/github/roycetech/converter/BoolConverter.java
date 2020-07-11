@@ -2,8 +2,9 @@ package com.github.roycetech.converter;
 
 /**
  * @author Royce Remulla
+ * @param <T>
  */
-public class BoolConverter implements ElementConverter<Boolean> {
+public class BoolConverter implements ElementConverter {
 
     /** {@inheritDoc} */
     @Override

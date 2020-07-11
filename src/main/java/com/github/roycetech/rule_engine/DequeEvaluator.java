@@ -3,6 +3,7 @@
  */
 package com.github.roycetech.rule_engine;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
@@ -33,27 +34,21 @@ public class DequeEvaluator {
 	    .getLogger(DequeEvaluator.class);
 
     /** Token based converters */
-    private final Map<String, ElementConverter<?>> tokenConverters;
+    private final Map<String, ElementConverter> tokenConverters;
 
     /** Stack for holding expression converted to reversed polish notation. */
-    private final Deque<String> stackRPN;
+    private final Deque<Object> stackRPN;
 
-    /** Stack for holding the calculations result. */
-    private final Deque<String> stackAnswer;
-
-    DequeEvaluator(final Deque<String> stackRPN,
-	    final Deque<String> stackAnswer,
-	    final Map<String, ElementConverter<?>> tokenConverters) {
-
-	this.stackRPN = stackRPN;
-	this.stackAnswer = stackAnswer;
-	this.tokenConverters = tokenConverters;
-    }
+    /**
+     * Stack for holding the calculations result. Non-final for testability.
+     * Value type can be the traditional String type, but can also be an array.
+     */
+    private Deque<Object> stackAnswer;
 
     /**
      * Converters for the different supported data types.
      */
-    private static final Map<Class<? extends Object>, ElementConverter<?>> TYPE_CONVERTER;
+    private static final Map<Class<? extends Object>, ElementConverter> TYPE_CONVERTER;
     static {
 	TYPE_CONVERTER = new HashMap<>();
 
@@ -64,13 +59,22 @@ public class DequeEvaluator {
 	// array handled especially
     }
 
+    DequeEvaluator(final Deque<Object> stackRPN,
+	    final Deque<Object> stackAnswer,
+	    final Map<String, ElementConverter> tokenConverters) {
+
+	this.stackRPN = stackRPN;
+	this.stackAnswer = stackAnswer;
+	this.tokenConverters = tokenConverters;
+    }
+
     /**
      * @param scenario to evaluate against the rule expression.
      */
     Boolean evaluateOneRpn(final List<Object> scenario)
     {
-	final String single = this.stackRPN.peek();
-	final ElementConverter<?> converter = TYPE_CONVERTER
+	final String single = this.stackRPN.peek().toString();
+	final ElementConverter converter = TYPE_CONVERTER
 		.get(scenario.get(0).getClass());
 
 	final Token token = new Token(single);
@@ -83,7 +87,7 @@ public class DequeEvaluator {
     Boolean evaluateMultiRpn(final List<Object> scenario)
     {
 	this.stackAnswer.clear();
-	final Deque<String> stackRPNClone = ((ArrayDeque<String>) this.stackRPN)
+	final Deque<Object> stackRPNClone = ((ArrayDeque<Object>) this.stackRPN)
 		.clone();
 
 	evaluateStackRpn(stackRPNClone, scenario);
@@ -93,20 +97,25 @@ public class DequeEvaluator {
 	    throw new RuleEvaluatorException("Some operator is missing");
 	}
 
-	return Boolean.valueOf(this.stackAnswer.pop().substring(1));
+	final String last = (String) this.stackAnswer.removeLast();
+	return Boolean.valueOf(last.substring(1));
     }
 
-    /** evaluating the RPN expression */
-    private void evaluateStackRpn(final Deque<String> stackRpn,
+    /**
+     * evaluating the RPN expression
+     *
+     * Package private for testability.
+     */
+    void evaluateStackRpn(final Deque<Object> stackRpn,
 	    final List<Object> scenario)
     {
 	String token;
 	while (!stackRpn.isEmpty()) {
-	    token = stackRpn.pop();
+	    token = stackRpn.removeLast().toString();
 	    if (LogicHelper.isOperator(token)) {
 		evaluateOperator(scenario, token.charAt(0));
 	    } else {
-		this.stackAnswer.add(token);
+		this.stackAnswer.push(token);
 	    }
 	}
     }
@@ -122,11 +131,14 @@ public class DequeEvaluator {
     }
 
     /**
+     *
      * @param scenario List of values to evaluate against the rule expression.
+     *
+     *                 Package private for testability.
      */
-    private void evaluateMultiNot(final List<Object> scenario)
+    void evaluateMultiNot(final List<Object> scenario)
     {
-	final String latest = this.stackAnswer.pop().trim();
+	final String latest = this.stackAnswer.removeLast().toString().trim();
 	String answer;
 
 	if (LogicHelper.isTrue(latest)) {
@@ -140,11 +152,19 @@ public class DequeEvaluator {
 	this.stackAnswer.add(LogicHelper.formatInternalResult(answer));
     }
 
+    /**
+     * Refactored method out of #evaluateMultiNot.
+     *
+     * @param scenario List of values to evaluate against the rule expression.
+     * @param latest   raw token to be evaluated.
+     *
+     * @return boolean result represented as String.
+     */
     private String evaluateNonInternal(final List<Object> scenario,
 	    final String latest)
     {
 	final Token token = new Token(latest);
-	final ElementConverter<?> converter = TYPE_CONVERTER
+	final ElementConverter converter = TYPE_CONVERTER
 		.get(scenario.get(0).getClass());
 	return String.valueOf(!token.accepts(scenario, converter));
     }
@@ -158,23 +178,26 @@ public class DequeEvaluator {
     private void evaluateMulti(final List<Object> scenario,
 	    final Operator operator)
     {
-	/* Convert 'nil' to nil. */
+	/* Convert "null" to null. */
 	final List<Object> formattedScenario = scenario.stream()
-		.map("nil"::equals).collect(Collectors.toList());
+		.map(s -> "null".equals(s) ? null : s)
+		.collect(Collectors.toList());
 
 	final Token left = nextValue();
 	final Token right = nextValue();
 
 	try {
+	    final Class<?> tokenArray = Array.newInstance(Token.class, 0)
+		    .getClass();
+
 	    final Method method = LogicHelper.class.getDeclaredMethod(
-		    "performLogical", List.class, Token.class, Token.class,
-		    Operator.class);
+		    "performLogical", List.class, tokenArray, Operator.class);
 
-	    final String answer = (String) method.invoke(null,
-		    formattedScenario, left, right, operator);
+	    final String answer = String.valueOf(method.invoke(null,
+		    formattedScenario, new Token[] { left, right
+		    }, operator));
 
-	    this.stackAnswer.add(LogicHelper.formatInternalResult(answer));
-
+	    this.stackAnswer.push(LogicHelper.formatInternalResult(answer));
 	} catch (final SecurityException | NoSuchMethodException
 		| IllegalArgumentException | IllegalAccessException
 		| InvocationTargetException e) {
@@ -188,7 +211,7 @@ public class DequeEvaluator {
      */
     private Token nextValue()
     {
-	final Object lastAnswer = this.stackAnswer.pop();
+	final Object lastAnswer = this.stackAnswer.removeLast();
 
 	if (lastAnswer.getClass().isArray()
 		|| LogicHelper.isInternal((String) lastAnswer)) {
@@ -202,7 +225,7 @@ public class DequeEvaluator {
     {
 	final Token token = new Token(tokenString);
 
-	final ElementConverter<?> converter = this.tokenConverters
+	final ElementConverter converter = this.tokenConverters
 		.get(token.getValue());
 	if (converter == null) {
 	    throw new RuleEvaluatorException(String.format(
@@ -212,5 +235,23 @@ public class DequeEvaluator {
 
 	token.convert(converter);
 	return token;
+    }
+
+    /**
+     * For testability only.
+     *
+     * @return the stackAnswer
+     */
+    Deque<Object> getStackAnswer()
+    {
+	return stackAnswer;
+    }
+
+    /**
+     * @param stackAnswer the stackAnswer to set
+     */
+    void setStackAnswer(final Deque<Object> stackAnswer)
+    {
+	this.stackAnswer = stackAnswer;
     }
 }

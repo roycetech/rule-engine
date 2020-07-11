@@ -4,7 +4,6 @@
 package com.github.roycetech.rule_engine;
 
 import java.util.ArrayDeque;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +23,9 @@ import com.github.roycetech.rule_engine.utils.Shunter;
 public class RuleEvaluator {
 
     /**
-     * Helper class to handle evaluations.
+     * Helper class to handle evaluations. Non-final for easier testability.
      */
-    private final DequeEvaluator dequeEvaluator;
+    private DequeEvaluator dequeEvaluator;
 
     /**
      * Shunting-yard algorithm util
@@ -34,22 +33,26 @@ public class RuleEvaluator {
     private final Shunter shunter;
 
     /** Temporary stack that holds operators, functions and brackets. */
-    private final Deque<String> stackOperations;
+    private final Deque<Object> stackOperations;
 
-    /** Stack for holding expression converted to reversed polish notation. */
-    private final Deque<String> stackRPN;
+    /**
+     * Stack for holding expression converted to reversed polish notation.
+     * Non-final for testability.
+     */
+    private Deque<Object> stackRPN;
 
     /** Stack for holding the calculations result. */
-    private final Deque<String> stackAnswer;
+    private final Deque<Object> stackAnswer;
 
     /** list of available operators. */
-    public static final String OPERATORS = String.format("%s%s%s", Operator.NOT,
-	    Operator.OR, Operator.AND);
+    public static final String OPERATORS = String.format("%s%s%s",
+	    Operator.NOT.getSymbol(), Operator.OR.getSymbol(),
+	    Operator.AND.getSymbol());
 
     /**
      * Converters for the different supported data types.
      */
-    private static final Map<Class<? extends Object>, ElementConverter<?>> TYPE_CONVERTER;
+    static final Map<Class<? extends Object>, ElementConverter> TYPE_CONVERTER;
     static {
 	TYPE_CONVERTER = new HashMap<>();
 
@@ -65,8 +68,7 @@ public class RuleEvaluator {
      *
      * @param tokenConverters token to converter mapping.
      */
-    public RuleEvaluator(
-	    final Map<String, ElementConverter<?>> tokenConverters) {
+    public RuleEvaluator(final Map<String, ElementConverter> tokenConverters) {
 	this.stackOperations = new ArrayDeque<>();
 	this.stackRPN = new ArrayDeque<>();
 	this.stackAnswer = new ArrayDeque<>();
@@ -74,7 +76,7 @@ public class RuleEvaluator {
 	this.dequeEvaluator = new DequeEvaluator(this.stackRPN,
 		this.stackAnswer, tokenConverters);
 
-	this.shunter = new Shunter(this.stackOperations, this.stackAnswer);
+	this.shunter = new Shunter(this.stackOperations, this.stackRPN);
     }
 
     /**
@@ -98,15 +100,15 @@ public class RuleEvaluator {
 		    RuleEvaluator.OPERATORS + "()");
 	}
 
-	for (final String token : (String[]) tokens) {
+	for (final Object token : (Object[]) tokens) {
 	    getShunter().shuntInternal(token);
 	}
 
 	while (!this.stackOperations.isEmpty()) {
-	    this.stackRPN.add(this.stackOperations.pop());
+	    this.stackRPN.push(this.stackOperations.removeLast());
 	}
 
-	Collections.reverse((List<?>) this.stackRPN);
+	// Reversed already.
     }
 
     /**
@@ -126,11 +128,35 @@ public class RuleEvaluator {
     }
 
     /**
+     * @return the stackRPN
+     */
+    Deque<Object> getStackRPN()
+    {
+	return stackRPN;
+    }
+
+    /**
+     * @param stackRPN the stackRPN to set
+     */
+    void setStackRPN(final Deque<Object> stackRPN)
+    {
+	this.stackRPN = stackRPN;
+    }
+
+    /**
      * @return the dequeEvaluator
      */
     public DequeEvaluator getDequeEvaluator()
     {
 	return dequeEvaluator;
+    }
+
+    /**
+     * @param dequeEvaluator the dequeEvaluator to set
+     */
+    void setDequeEvaluator(final DequeEvaluator dequeEvaluator)
+    {
+	this.dequeEvaluator = dequeEvaluator;
     }
 
     /**

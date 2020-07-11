@@ -21,10 +21,10 @@ public class RuleProcessor {
     /**
      * Token dependent converters.
      */
-    private final Map<String, ElementConverter<?>> tokenConverters;
+    private final Map<String, ElementConverter> tokenConverters;
 
     RuleProcessor(final Rule rule,
-	    final Map<String, ElementConverter<?>> tokenConverters) {
+	    final Map<String, ElementConverter> tokenConverters) {
 	this.rule = rule;
 	this.tokenConverters = tokenConverters;
     }
@@ -48,7 +48,7 @@ public class RuleProcessor {
 	    final String targetOutcome)
     {
 
-	final String clause = rule.getClause(targetOutcome);
+	final Object clause = rule.getClause(targetOutcome);
 	final RuleEvaluator ruleEvaluator = new RuleEvaluator(
 		this.tokenConverters);
 

@@ -56,7 +56,8 @@ public class LogicHelper {
     }
 
     /**
-     * Perform logical operation.
+     * Perform logical operation. It may return internal boolean representation,
+     * thus the return value is string.
      *
      * @param scenario  the list of scenario tokens.
      * @param tokenPair the left and right token for binary evaluation.
@@ -69,9 +70,9 @@ public class LogicHelper {
 
 	final Token left = tokenPair[0];
 	final Token right = tokenPair[1];
-	final String evaluated = bothInternalInternal(left, right, operation);
+	final String evaluated = performBothInternal(left, right, operation);
 
-	if (Boolean.parseBoolean(evaluated)) {
+	if (!"false".equals(evaluated)) {
 	    return evaluated;
 	}
 
@@ -90,11 +91,11 @@ public class LogicHelper {
 	try {
 	    method = LogicHelper.class.getDeclaredMethod(methodName, List.class,
 		    Token.class, Token.class);
-	    return (String) method.invoke(null, scenario, left, right);
+	    return method.invoke(null, scenario, left, right).toString();
 	} catch (NoSuchMethodException | SecurityException
 		| IllegalAccessException | IllegalArgumentException
 		| InvocationTargetException e) {
-	    LOGGER.warn(e.getMessage(), e);
+	    LOGGER.error(e.getMessage(), e);
 	    return null;
 	}
     }
@@ -146,14 +147,20 @@ public class LogicHelper {
 	return ITRUE.equals(token) || IFALSE.equals(token);
     }
 
-    public static boolean isOperator(final String token)
+    public static boolean isOperator(final Object token)
     {
-	return !"".equals(token) && RuleEvaluator.OPERATORS.contains(token);
+	if (token == null) {
+	    return false;
+	}
+
+	final String tokenString = token.toString();
+	return !"".equals(tokenString) && tokenString.length() == 1
+		&& RuleEvaluator.OPERATORS.indexOf(tokenString) > -1;
     }
 
     /**
-     * Returns true if answer starts with *, *true if answer is true, same goes
-     * for false.
+     * Returns the passed parameter if it already starts with *, *true if answer
+     * is true, and *false for false.
      */
     static String formatInternalResult(final String answer)
     {
@@ -167,11 +174,13 @@ public class LogicHelper {
 //private methods ==========================================================
 
     /**
+     * Evaluates when both the tokens are internal booleans.
+     *
      * @param left     token.
      * @param right    token.
      * @param operator either 'and' or 'or' operator.
      */
-    private static String bothInternalInternal(final Token left,
+    private static String performBothInternal(final Token left,
 	    final Token right, final Operator operator)
     {
 	final String defaultResult = PRIMARY_RESULT.get(operator);
@@ -197,7 +206,7 @@ public class LogicHelper {
      * @param right
      * @return
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused") // Used via reflection.
     private static boolean evaluateAnd(final List<Object> scenario,
 	    final Token left, final Token right)
     {
@@ -218,7 +227,7 @@ public class LogicHelper {
      * @param right
      * @return
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused") // Used via reflection.
     private static boolean evaluateOr(final List<Object> scenario,
 	    final Token left, final Token right)
     {

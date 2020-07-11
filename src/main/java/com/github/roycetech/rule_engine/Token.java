@@ -52,7 +52,7 @@ public class Token {
      */
     public boolean isNegative()
     {
-	return subscript < 0;
+	return this.subscript < 0;
     }
 
     /**
@@ -91,7 +91,7 @@ public class Token {
      * @return true of this token satisfies the given scenario.
      */
     public boolean accepts(final List<Object> scenario,
-	    final ElementConverter<?> converter)
+	    final ElementConverter converter)
     {
 
 	final Object convertedValue = converter.convert((String) this.value);
@@ -106,7 +106,7 @@ public class Token {
      *
      * @param converter converter instance to convert this token's value.
      */
-    public void convert(final ElementConverter<?> converter)
+    public void convert(final ElementConverter converter)
     {
 	this.value = converter.convert((String) this.value);
     }

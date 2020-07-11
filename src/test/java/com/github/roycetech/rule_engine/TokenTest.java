@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.github.roycetech.converter.StrConverter;
+
 public class TokenTest {
 
     private static final String ORANGE = "orange";
@@ -93,6 +95,29 @@ public class TokenTest {
 
 	    final boolean expected = (boolean) objects[2];
 	    assertEquals(expected, sut.accepts(scenario));
+	}
+    }
+
+    @Test
+    public final void testAccepts_converter()
+    {
+	// @formatter:off
+	final Object[][] testData =  {
+		{ new Token(APPLE, -1),  new Object[] { APPLE }, true },
+		{ new Token(ORANGE, -1), new Object[] { APPLE }, false },
+		{ new Token(APPLE, 0),   new Object[] { APPLE, ORANGE }, true },
+		{ new Token("guava", 0),   new Object[] { APPLE }, false },
+		{ new Token(ORANGE, 0),   new Object[] { APPLE, ORANGE }, false },
+	};
+	// @formatter:on
+
+	final StrConverter converter = new StrConverter();
+	for (final Object[] objects : testData) {
+	    final Token sut = (Token) objects[0];
+	    final List<Object> scenario = Arrays.asList((Object[]) objects[1]);
+
+	    final boolean expected = (boolean) objects[2];
+	    assertEquals(expected, sut.accepts(scenario, converter));
 	}
     }
 

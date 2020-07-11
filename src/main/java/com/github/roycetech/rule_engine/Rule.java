@@ -18,7 +18,7 @@ public class Rule {
     /**
      * Contains the outcome to rule-clause hash.
      */
-    private final Map<String, String> outcomeClauseHash;
+    private final Map<String, Object> outcomeClauseHash;
 
     /**
      * Instantiate a rule with the given clause. <br>
@@ -28,9 +28,8 @@ public class Rule {
      *
      * @param rules the outcome to clause mapping.
      */
-    public Rule(final Map<String, String> rules) {
-
-	if (rules.isEmpty()) {
+    public Rule(final Map<String, Object> rules) {
+	if (rules == null || rules.isEmpty()) {
 	    throw new IllegalArgumentException("Must not have empty rules");
 	}
 
@@ -41,22 +40,25 @@ public class Rule {
     }
 
     /**
+     * Removes unwanted spaces between operators.
      *
      * @param clause dynamic, can be a String or an Array, blech.
-     * @return
+     * @return the sanitized clause.
      */
-    static String sanitize(final String clause)
+    static Object sanitize(final Object clause)
     {
 	if (clause.getClass().isArray()) {
 	    return clause;
 	}
 
-	String cleaner = Rule.removeSpaces(clause, '(');
-	cleaner = Rule.removeSpaces(cleaner, ')');
-	cleaner = Rule.removeSpaces(cleaner, '&');
-	cleaner = Rule.removeSpaces(cleaner, '|');
+	final String clauseString = (String) clause;
 
-	return Rule.removeSpaces(cleaner, '!').strip();
+	String cleaner = Rule.removeSpaces(clauseString, "\\(");
+	cleaner = Rule.removeSpaces(cleaner, "\\)");
+	cleaner = Rule.removeSpaces(cleaner, "&");
+	cleaner = Rule.removeSpaces(cleaner, "\\|");
+
+	return Rule.removeSpaces(cleaner, "!").trim();
     }
 
     int getSize()
@@ -68,9 +70,10 @@ public class Rule {
      * Removes the leading and trailing spaces of rule tokens.
      *
      * @param string    rule clause.
-     * @param separator rule clause token.
+     * @param separator rule engine operator. Regex like operators must be
+     *                  escaped.
      */
-    static String removeSpaces(final String token, final char separator)
+    static String removeSpaces(final String token, final String separator)
     {
 	return token.replaceAll("\\s*" + separator + "\\s*",
 		String.valueOf(separator));
@@ -89,7 +92,7 @@ public class Rule {
      *
      * @return the rule clause.
      */
-    public String getClause(final String outcome)
+    public Object getClause(final String outcome)
     {
 	return this.outcomeClauseHash.get(outcome);
     }

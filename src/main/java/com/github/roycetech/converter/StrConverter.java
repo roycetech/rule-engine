@@ -5,13 +5,13 @@ package com.github.roycetech.converter;
  *
  * @author Royce Remulla
  */
-public class StrConverter implements ElementConverter<String> {
+public class StrConverter implements ElementConverter {
 
     /** {@inheritDoc} */
     @Override
     public String convert(final String string)
     {
-	if (string == null) {
+	if ("null".equals(string)) {
 	    return null;
 	}
 
