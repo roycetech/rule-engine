@@ -3,7 +3,7 @@ package com.github.roycetech.rule_engine;
 import java.util.Locale;
 
 /** */
-enum Operator {
+public enum Operator {
     /** */
     NOT('!', Byte.MAX_VALUE), AND('&', (byte) 2), OR('|', (byte) 1);
 

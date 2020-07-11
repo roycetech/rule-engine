@@ -4,6 +4,8 @@
 package com.github.roycetech.rule_engine;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.github.roycetech.converter.ElementConverter;
 
@@ -29,8 +31,7 @@ public class Token {
      *                 subscript.
      */
     public Token(final String rawValue) {
-	this(rawValue.substring(0, rawValue.indexOf('[')),
-		RuleEvaluator.extractSubscript(rawValue));
+	this(extractBody(rawValue), extractSubscript(rawValue));
     }
 
     /**
@@ -108,6 +109,41 @@ public class Token {
     public void convert(final ElementConverter<?> converter)
     {
 	this.value = converter.convert((String) this.value);
+    }
+
+    /**
+     * Returns value of 'n' if rule token ends with '[n]'. where 'n' is the
+     * variable group index.
+     *
+     * @param string token to check for subscript.
+     */
+    private static String extractBody(final String token)
+    {
+	final int bracketIndex = token.indexOf('[');
+	if (bracketIndex > -1) {
+	    return token.substring(0, bracketIndex);
+	}
+	return token;
+    }
+
+    /**
+     * Returns value of 'n' if rule token ends with '[n]'. where 'n' is the
+     * variable group index.
+     *
+     * @param string token to check for subscript.
+     */
+    private static int extractSubscript(final String token)
+    {
+	final String tokenString = token;
+
+	final Pattern pattern = Pattern.compile(".*\\[[\\d*]\\]");
+	final Matcher matcher = pattern.matcher(tokenString);
+	if (matcher.find()) {
+	    final String indexStr = tokenString.substring(
+		    tokenString.indexOf('[') + 1, tokenString.indexOf(']'));
+	    return Integer.parseInt(indexStr);
+	}
+	return -1;
     }
 
     /**

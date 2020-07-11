@@ -9,11 +9,26 @@ import org.junit.Test;
 
 public class TokenTest {
 
+    private static final String ORANGE = "orange";
+    private static final String APPLE = "apple";
+
+    @Test
+    public final void testConstructorString_withSubscript()
+    {
+	assertEquals("token", new Token("token[0]").getValue());
+    }
+
+    @Test
+    public final void testConstructorString_noSubscript()
+    {
+	assertEquals("token", new Token("token").getValue());
+    }
+
     @Test
     public final void testIsNegative()
     {
 	// @formatter:off
-	final Object[][] testData = new Object[][] {
+	final Object[][] testData = {
 	    { new Token(null, -1), true },
 	    { new Token(null, 0), false },
 	    { new Token(null, 1), false }
@@ -31,22 +46,22 @@ public class TokenTest {
     public final void testEqualsInternal()
     {
 	// @formatter:off
-	final Object[][] testData = new Object[][] {
-	    { new Token("1", -1),               LogicHelper.FALSE, false },
-	    { new Token(LogicHelper.TRUE, -1),  LogicHelper.FALSE, false },
-	    { new Token(LogicHelper.FALSE, -1), LogicHelper.FALSE, true },
+	final Object[][] testData = {
+	    { new Token("1", -1),               LogicHelper.IFALSE, false },
+	    { new Token(LogicHelper.ITRUE, -1),  LogicHelper.IFALSE, false },
+	    { new Token(LogicHelper.IFALSE, -1), LogicHelper.IFALSE, true },
 
-	    { new Token("2", 0),                LogicHelper.FALSE, false },
-	    { new Token(LogicHelper.TRUE, 0),   LogicHelper.FALSE, false },
-	    { new Token(LogicHelper.FALSE, 0),  LogicHelper.FALSE, false },
+	    { new Token("2", 0),                LogicHelper.IFALSE, false },
+	    { new Token(LogicHelper.ITRUE, 0),   LogicHelper.IFALSE, false },
+	    { new Token(LogicHelper.IFALSE, 0),  LogicHelper.IFALSE, false },
 
-	    { new Token("3", -1),               LogicHelper.TRUE, false },
-	    { new Token(LogicHelper.TRUE, -1),  LogicHelper.TRUE, true },
-	    { new Token(LogicHelper.FALSE, -1), LogicHelper.TRUE, false },
+	    { new Token("3", -1),               LogicHelper.ITRUE, false },
+	    { new Token(LogicHelper.ITRUE, -1),  LogicHelper.ITRUE, true },
+	    { new Token(LogicHelper.IFALSE, -1), LogicHelper.ITRUE, false },
 
-	    { new Token("4", 0),                LogicHelper.TRUE, false },
-	    { new Token(LogicHelper.TRUE, 0),   LogicHelper.TRUE, false },
-	    { new Token(LogicHelper.FALSE, 0),  LogicHelper.TRUE, false }
+	    { new Token("4", 0),                LogicHelper.ITRUE, false },
+	    { new Token(LogicHelper.ITRUE, 0),   LogicHelper.ITRUE, false },
+	    { new Token(LogicHelper.IFALSE, 0),  LogicHelper.ITRUE, false }
 	};
 	// @formatter:on
 
@@ -63,12 +78,12 @@ public class TokenTest {
     public final void testAccepts()
     {
 	// @formatter:off
-	final Object[][] testData = new Object[][] {
-	    { new Token("apple", -1),  new Object[] { "apple" }, true },
-	    { new Token("orange", -1), new Object[] { "apple" }, false },
-	    { new Token("apple", 0),   new Object[] { "apple", "orange" }, true },
-	    { new Token("guava", 0),   new Object[] { "apple" }, false },
-	    { new Token("orange", 0),   new Object[] { "apple", "orange" }, false },
+	final Object[][] testData =  {
+	    { new Token(APPLE, -1),  new Object[] { APPLE }, true },
+	    { new Token(ORANGE, -1), new Object[] { APPLE }, false },
+	    { new Token(APPLE, 0),   new Object[] { APPLE, ORANGE }, true },
+	    { new Token("guava", 0),   new Object[] { APPLE }, false },
+	    { new Token(ORANGE, 0),   new Object[] { APPLE, ORANGE }, false },
 	};
 	// @formatter:on
 
@@ -84,6 +99,6 @@ public class TokenTest {
     @Test
     public final void testToString()
     {
-	assertEquals("apple[-1]", new Token("apple", -1).toString());
+	assertEquals("apple[-1]", new Token(APPLE, -1).toString());
     }
 }

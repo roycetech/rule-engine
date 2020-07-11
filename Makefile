@@ -12,8 +12,14 @@ help:
 init:
 	@echo init
 
-test:
+test: pmd-dev
 	mvn test
+
+pmd-dev:
+	sed -i '' 's/PMD-roycetech-2020-single-thread-test/PMD-roycetech-2020-single-thread-main/g' .eclipse-pmd
+
+pmd-test:
+	sed -i '' 's/PMD-roycetech-2020-single-thread-main/PMD-roycetech-2020-single-thread-test/g' .eclipse-pmd
 
 run:
 	@echo run
@@ -35,4 +41,4 @@ clean:
 	rm -rf target/
 	rm -rf bin/
 
-.PHONY: help test init clean run version-set version-get release verify
+.PHONY: help test init clean run version-set version-get release verify pmd-dev pmd-test
