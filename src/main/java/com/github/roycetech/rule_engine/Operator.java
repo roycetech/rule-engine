@@ -26,7 +26,7 @@ public enum Operator {
     /**
      * Derive Operator instance from a given character.
      *
-     * @param symbol can be '!', '&', or '|'
+     * @param symbol can be a character of bang, and, or.
      * @return the operator object for the given symbol.
      */
     public static Operator fromChar(final char symbol)
