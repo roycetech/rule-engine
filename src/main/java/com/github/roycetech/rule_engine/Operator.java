@@ -26,7 +26,7 @@ public enum Operator {
     /**
      * Derive Operator instance from a given character.
      *
-     * @param operator operator character symbol.
+     * @param symbol can be '!', '&', or '|'
      * @return the operator object for the given symbol.
      */
     public static Operator fromChar(final char symbol)
@@ -41,9 +41,10 @@ public enum Operator {
     }
 
     /**
-     * Derive Operator instance from a given character.
+     * Derive Operator instance from a given String.
      *
      * @param operator operator character symbol.
+     * @return the operator object for the given symbol.
      */
     public static Operator fromString(final String operator)
     {
