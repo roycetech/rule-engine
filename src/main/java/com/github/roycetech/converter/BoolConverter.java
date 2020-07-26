@@ -2,7 +2,6 @@ package com.github.roycetech.converter;
 
 /**
  * @author Royce Remulla
- * @param <T>
  */
 public class BoolConverter implements ElementConverter {
 

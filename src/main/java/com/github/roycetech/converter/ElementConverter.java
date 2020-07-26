@@ -13,7 +13,6 @@ public interface ElementConverter {
      * Convert string to correct data type.
      *
      * @param string element to convert.
-     * @param <T>    Scenario element type.
      *
      * @return the string converted to it's actual type.
      */

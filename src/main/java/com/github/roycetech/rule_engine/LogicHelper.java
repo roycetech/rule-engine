@@ -103,7 +103,7 @@ public class LogicHelper {
     /**
      * Check if the token is opening bracket.
      *
-     * @token Input <code>String</code> token
+     * @param token Input <code>String</code> token
      * @return <code>boolean</code> output
      */
     public static boolean isOpenBracket(final char token)
@@ -112,8 +112,10 @@ public class LogicHelper {
     }
 
     /**
-     * Check if the token is closing bracket. # * # * @param token Input
-     * <code>String</code> token # * @return <code>boolean</code> output #
+     * Check if the token is closing bracket.
+     *
+     * @param token the char to check for bracket.
+     * @return true if the token is a close bracket.
      */
     public static boolean isCloseBracket(final char token)
     {

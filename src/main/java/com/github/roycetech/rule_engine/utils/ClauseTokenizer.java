@@ -17,8 +17,9 @@ public final class ClauseTokenizer {
     }
 
     /**
-     * @clause - rule clause to be tokenized
-     * @tokens - the tokens to be used to break down the clause.
+     * @param clause - rule clause to be tokenized
+     * @param tokens - the tokens to be used to break down the clause.
+     * @return the tokenized representation of the clause.
      */
     public static Object[] tokenize(final String clause, final String tokens)
     {

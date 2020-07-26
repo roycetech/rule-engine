@@ -27,6 +27,7 @@ public enum Operator {
      * Derive Operator instance from a given character.
      *
      * @param operator operator character symbol.
+     * @return the operator object for the given symbol.
      */
     public static Operator fromChar(final char symbol)
     {

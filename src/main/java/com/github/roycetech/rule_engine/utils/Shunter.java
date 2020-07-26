@@ -30,7 +30,7 @@ public class Shunter {
     /**
      * For the Deque version, stackRPN has to be in reversed order already.
      *
-     * @param tokenChar token.
+     * @param token token on which to perform the shunting algorithm.
      */
     public void shuntInternal(final Object token)
     {
