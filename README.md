@@ -34,4 +34,5 @@ Preference was put on the LogicChecker example, available in another language.
 
 ### References
 
-[Working with Apache Maven]()https://central.sonatype.org/pages/apache-maven.html)
+- [Working with Apache Maven](https://central.sonatype.org/pages/apache-maven.html)
+- [Shunting Yard Algorith Wikipedia](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
