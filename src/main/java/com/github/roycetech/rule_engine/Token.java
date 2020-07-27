@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import com.github.roycetech.converter.ElementConverter;
 
 /**
+ * Represents a rule token.
+ *
  * @author royce
  */
 public class Token {

@@ -38,7 +38,7 @@ public class RuleTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.Rule#sanitize(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.Rule#sanitize(java.lang.Object)}.
      */
     @Test
     public final void testSanitize_string()
@@ -49,7 +49,7 @@ public class RuleTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.Rule#sanitize(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.Rule#sanitize(java.lang.Object)}.
      */
     @Test
     public final void testSanitize_Array()

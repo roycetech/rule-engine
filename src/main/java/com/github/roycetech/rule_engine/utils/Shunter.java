@@ -21,6 +21,10 @@ public class Shunter {
     /** Stack for holding expression converted to reversed polish notation. */
     private final Deque<Object> stackRPN;
 
+    /**
+     * @param stackOperations stack to hold the operators.
+     * @param stackRPN        stack of the reverse polish notation.
+     */
     public Shunter(final Deque<Object> stackOperations,
 	    final Deque<Object> stackRPN) {
 	this.stackOperations = stackOperations;

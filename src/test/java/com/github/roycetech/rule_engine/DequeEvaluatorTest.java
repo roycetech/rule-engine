@@ -8,7 +8,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +43,6 @@ public class DequeEvaluatorTest {
      * Ignorable instances.
      */
     private static final Deque<Object> DUMMY_DEQUE = new ArrayDeque<>();
-    private static final Deque<Object> DUMMY_DEQUE_OBJ = new ArrayDeque<>();
     private static final List<Object> DUMMY_SCENARIO = new ArrayList<>();
     private static final HashMap<String, ElementConverter> DUMMY_CONVERTERS = new HashMap<>();
 
@@ -57,7 +55,7 @@ public class DequeEvaluatorTest {
     {
 	final Deque<Object> stackRPN = new ArrayDeque<>();
 	stackRPN.push(APPLE);
-	final DequeEvaluator subject = new DequeEvaluator(stackRPN, null, null);
+	final DequeEvaluator subject = new DequeEvaluator(stackRPN, null);
 	assertTrue(subject.evaluateOneRpn(Arrays.asList(APPLE)));
     }
 
@@ -78,7 +76,7 @@ public class DequeEvaluatorTest {
 	stackRPN.add("true[0]");
 
 	final DequeEvaluator subject = new DequeEvaluator(stackRPN,
-		new ArrayDeque<>(), tokenConverters);
+		tokenConverters);
 
 	assertFalse(subject.evaluateMultiRpn(Arrays.asList(false, false)));
     }
@@ -96,7 +94,7 @@ public class DequeEvaluatorTest {
 	stackAnswer.add("2");
 
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_DEQUE_OBJ, DUMMY_CONVERTERS);
+		DUMMY_CONVERTERS);
 	final DequeEvaluator spySubject = spy(subject);
 
 	final List<Object> scenario = new ArrayList<>();
@@ -118,7 +116,7 @@ public class DequeEvaluatorTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateOperator(java.util.List, java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateOperator(java.util.List, char)}.
      *
      * Coverage test.
      */
@@ -127,7 +125,7 @@ public class DequeEvaluatorTest {
 
     {
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_DEQUE_OBJ, DUMMY_CONVERTERS);
+		DUMMY_CONVERTERS);
 	final DequeEvaluator spySubject = spy(subject);
 
 	Mockito.doNothing().when(spySubject)
@@ -152,7 +150,8 @@ public class DequeEvaluatorTest {
 	stackAnswers.add("*true");
 
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		stackAnswers, DUMMY_CONVERTERS);
+		DUMMY_CONVERTERS);
+	subject.setStackAnswer(stackAnswers);
 
 	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
 		DequeEvaluator.class, "evaluateMultiNot", List.class);
@@ -167,15 +166,13 @@ public class DequeEvaluatorTest {
      */
     @Test
     public final void testEvaluateMultiNot_internalTrue()
-	    throws NoSuchMethodException, SecurityException,
-	    IllegalAccessException, IllegalArgumentException,
-	    InvocationTargetException
     {
 	final Deque<Object> stackAnswers = new ArrayDeque<>();
 	stackAnswers.add("*false");
 
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		stackAnswers, DUMMY_CONVERTERS);
+		DUMMY_CONVERTERS);
+	subject.setStackAnswer(stackAnswers);
 
 	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
 		DequeEvaluator.class, "evaluateMultiNot", List.class);
@@ -201,8 +198,9 @@ public class DequeEvaluatorTest {
 	stackAnswers.add("false[1]");
 	stackAnswers.add("basic");
 
-	final DequeEvaluator subject = new DequeEvaluator(null, stackAnswers,
+	final DequeEvaluator subject = new DequeEvaluator(null,
 		tokenConverters);
+	subject.setStackAnswer(stackAnswers);
 
 	final List<Object> scenario = Arrays.asList(false, false, false,
 		"basic");
@@ -223,7 +221,7 @@ public class DequeEvaluatorTest {
     public final void testEvaluateNonInternal()
     {
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_DEQUE_OBJ, DUMMY_CONVERTERS);
+		DUMMY_CONVERTERS);
 
 	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
 		DequeEvaluator.class, "evaluateNonInternal", List.class,
@@ -252,7 +250,8 @@ public class DequeEvaluatorTest {
 	tokenConverters.put("999", new IntConverter());
 
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		stackAnswers, tokenConverters);
+		tokenConverters);
+	subject.setStackAnswer(stackAnswers);
 
 	final List<Object> scenario = Arrays.asList("null");
 
@@ -272,7 +271,7 @@ public class DequeEvaluatorTest {
     public final void testNextValue_array()
     {
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_DEQUE_OBJ, DUMMY_CONVERTERS);
+		DUMMY_CONVERTERS);
 
 	final Deque<Object> stackAnswers = new ArrayDeque<>();
 	stackAnswers.add("first");
@@ -298,7 +297,7 @@ public class DequeEvaluatorTest {
     public final void testNextValue_internal()
     {
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_DEQUE_OBJ, DUMMY_CONVERTERS);
+		DUMMY_CONVERTERS);
 
 	final Deque<Object> stackAnswers = new ArrayDeque<>();
 	stackAnswers.add("first");
@@ -322,7 +321,7 @@ public class DequeEvaluatorTest {
     public final void testNextValueDefault_exception()
     {
 	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_DEQUE_OBJ, DUMMY_CONVERTERS);
+		DUMMY_CONVERTERS);
 
 	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
 		DequeEvaluator.class, "nextValueDefault", String.class);

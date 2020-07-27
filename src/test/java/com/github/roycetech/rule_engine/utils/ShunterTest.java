@@ -5,7 +5,6 @@ package com.github.roycetech.rule_engine.utils;
 
 import static org.junit.Assert.assertArrayEquals;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -27,7 +26,7 @@ public class ShunterTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.Object)}.
      */
     @Test
     public final void testShuntInternal_Token1()
@@ -40,7 +39,7 @@ public class ShunterTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.Object)}.
      */
     @Test
     public final void testShuntInternal_Token2()
@@ -57,7 +56,7 @@ public class ShunterTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.Object)}.
      *
      * Symbiotic to rast LogicChecker. Result is slightly different in order,
      * because in Java, the collection object used is already in the reversed
@@ -76,7 +75,7 @@ public class ShunterTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.Object)}.
      *
      * Symbiotic Recruiter.
      */
@@ -91,7 +90,7 @@ public class ShunterTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntInternal(java.lang.Object)}.
      *
      * Symbiotic Recruiter.
      */
@@ -121,7 +120,7 @@ public class ShunterTest {
     // Testing Private Methods ===================================
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntClose(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.utils.Shunter#shuntClose()}.
      *
      * Symbiotic. Based off working example Recruiter from rast.
      */
@@ -158,9 +157,7 @@ public class ShunterTest {
      * Based off working example from rast.
      */
     @Test
-    public final void testShuntOperator() throws NoSuchMethodException,
-	    SecurityException, IllegalAccessException, IllegalArgumentException,
-	    InvocationTargetException
+    public final void testShuntOperator()
     {
 	final Deque<Object> stackOperations = new ArrayDeque<>();
 	stackOperations.add("&");

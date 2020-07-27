@@ -14,7 +14,7 @@ import com.github.roycetech.converter.ElementConverter;
 import com.github.roycetech.converter.FloatConverter;
 import com.github.roycetech.converter.IntConverter;
 import com.github.roycetech.converter.StrConverter;
-import com.github.roycetech.rule_engine.utils.ClauseTokenizer;
+import com.github.roycetech.rule_engine.utils.TokenizerUtil;
 import com.github.roycetech.rule_engine.utils.Shunter;
 
 /**
@@ -40,9 +40,6 @@ public class RuleEvaluator {
      * Non-final for testability.
      */
     private Deque<Object> stackRPN;
-
-    /** Stack for holding the calculations result. */
-    private final Deque<Object> stackAnswer;
 
     /** list of available operators. */
     public static final String OPERATORS = String.format("%s%s%s",
@@ -71,10 +68,8 @@ public class RuleEvaluator {
     public RuleEvaluator(final Map<String, ElementConverter> tokenConverters) {
 	this.stackOperations = new ArrayDeque<>();
 	this.stackRPN = new ArrayDeque<>();
-	this.stackAnswer = new ArrayDeque<>();
-
 	this.dequeEvaluator = new DequeEvaluator(this.stackRPN,
-		this.stackAnswer, tokenConverters);
+		tokenConverters);
 
 	this.shunter = new Shunter(this.stackOperations, this.stackRPN);
     }
@@ -96,7 +91,7 @@ public class RuleEvaluator {
 	if (expression.getClass().isArray()) {
 	    tokens = expression;
 	} else {
-	    tokens = ClauseTokenizer.tokenize((String) expression,
+	    tokens = TokenizerUtil.tokenize((String) expression,
 		    RuleEvaluator.OPERATORS + "()");
 	}
 

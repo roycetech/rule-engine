@@ -60,11 +60,10 @@ public class DequeEvaluator {
     }
 
     DequeEvaluator(final Deque<Object> stackRPN,
-	    final Deque<Object> stackAnswer,
 	    final Map<String, ElementConverter> tokenConverters) {
 
 	this.stackRPN = stackRPN;
-	this.stackAnswer = stackAnswer;
+	this.stackAnswer = new ArrayDeque<>();
 	this.tokenConverters = tokenConverters;
     }
 

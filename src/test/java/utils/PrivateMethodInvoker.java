@@ -20,6 +20,11 @@ public class PrivateMethodInvoker {
      */
     private Method method;
 
+    /**
+     * @param klass      target class that defines the private method.
+     * @param methodName the private method to be invoked.
+     * @param argClasses parameter types of the private method.
+     */
     public PrivateMethodInvoker(final Class<?> klass, final String methodName,
 	    final Class<?>... argClasses) {
 	try {
@@ -30,6 +35,15 @@ public class PrivateMethodInvoker {
 	}
     }
 
+    /**
+     * Sets the private method to accessible and invokes it on the target.
+     *
+     * @param <T>    the type to which to cast the result.
+     * @param target null for static or the instance on which to call the
+     *               method.
+     * @param params parameters to the private method.
+     * @return the result of the private method invocation.
+     */
     @SuppressWarnings("unchecked")
     public <T> T invoke(final Object target, final Object... params)
     {

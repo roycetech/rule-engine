@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author royce
  */
-public class LogicHelper {
+public final class LogicHelper {
 
     /** */
     private static final Logger LOGGER = LoggerFactory
@@ -56,13 +56,12 @@ public class LogicHelper {
     }
 
     /**
-     * Perform logical operation. It may return internal boolean representation,
-     * thus the return value is string.
+     * Performs custom logical operation on a pair of token against a scenario.
      *
      * @param scenario  the list of scenario tokens.
      * @param tokenPair the left and right token for binary evaluation.
      * @param operation either AND or OR.
-     * @return the result of the logical operation.
+     * @return boolean or an internal result of the evaluation.
      */
     public static String performLogical(final List<Object> scenario,
 	    final Token[] tokenPair, final Operator operation)
@@ -72,7 +71,8 @@ public class LogicHelper {
 	final Token right = tokenPair[1];
 	final String evaluated = performBothInternal(left, right, operation);
 
-	if (!"false".equals(evaluated)) {
+	final boolean nonFalseResult = !"false".equals(evaluated);
+	if (nonFalseResult) {
 	    return evaluated;
 	}
 
@@ -149,6 +149,12 @@ public class LogicHelper {
 	return ITRUE.equals(token) || IFALSE.equals(token);
     }
 
+    /**
+     * Checks if the token object is an operator.
+     *
+     * @param token the target to be checked.
+     * @return true if the token object is an operator.
+     */
     public static boolean isOperator(final Object token)
     {
 	if (token == null) {

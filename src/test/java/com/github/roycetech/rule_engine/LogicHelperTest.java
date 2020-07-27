@@ -211,7 +211,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.Object)}.
      */
     @Test
     public final void testIsOperator_and()
@@ -221,7 +221,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.Object)}.
      */
     @Test
     public final void testIsOperator_negative_null()
@@ -231,7 +231,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.Object)}.
      */
     @Test
     public final void testIsOperator_negative_empty()
@@ -241,7 +241,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.Object)}.
      */
     @Test
     public final void testIsOperator_negative_tooLong()
@@ -251,7 +251,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#isOperator(java.lang.Object)}.
      */
     @Test
     public final void testIsOperator_negative_unknownSymbol()
@@ -301,7 +301,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#evaluateOr(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#evaluateOr(List,Token, Token)}.
      */
     @Test
     public final void testEvaluateOr_short()
@@ -322,7 +322,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#evaluateOr(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#evaluateOr(List, Token, Token)}.
      */
     @Test
     public final void testEvaluateOr_long()
@@ -343,7 +343,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#evaluateAnd(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#evaluateAnd(List, Token, Token)}.
      */
     @Test
     public final void testEvaluateAnd_short()
@@ -364,7 +364,7 @@ public class LogicHelperTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.rule_engine.LogicHelper#evaluateAnd(java.lang.String)}.
+     * {@link com.github.roycetech.rule_engine.LogicHelper#evaluateAnd(java.util.List, Token, Token)}.
      */
     @Test
     public final void testEvaluateAnd_long()

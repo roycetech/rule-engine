@@ -13,6 +13,10 @@ import org.junit.Test;
  */
 public class IntConverterTest {
 
+    /**
+     * Test method for
+     * {@link com.github.roycetech.converter.IntConverter#convert(java.lang.String)}.
+     */
     @Test
     public final void testConvert_classOK()
     {

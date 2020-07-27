@@ -9,23 +9,38 @@ import org.junit.Test;
 
 import com.github.roycetech.converter.StrConverter;
 
+/**
+ * Test class for {@link com.github.roycetech.rule_engine.Token}.
+ */
 public class TokenTest {
 
     private static final String ORANGE = "orange";
     private static final String APPLE = "apple";
 
+    /**
+     * Test method for
+     * {@link com.github.roycetech.rule_engine.Token#Token(String)}.
+     */
     @Test
     public final void testConstructorString_withSubscript()
     {
 	assertEquals("token", new Token("token[0]").getValue());
     }
 
+    /**
+     * Test method for
+     * {@link com.github.roycetech.rule_engine.Token#Token(String)}.
+     */
     @Test
     public final void testConstructorString_noSubscript()
     {
 	assertEquals("token", new Token("token").getValue());
     }
 
+    /**
+     * Test method for
+     * {@link com.github.roycetech.rule_engine.Token#isNegative()}.
+     */
     @Test
     public final void testIsNegative()
     {
@@ -44,6 +59,10 @@ public class TokenTest {
 	}
     }
 
+    /**
+     * Test method for
+     * {@link com.github.roycetech.rule_engine.Token#equalsInternal(String)}.
+     */
     @Test
     public final void testEqualsInternal()
     {
@@ -76,6 +95,10 @@ public class TokenTest {
 	}
     }
 
+    /**
+     * Test method for
+     * {@link com.github.roycetech.rule_engine.Token#accepts(List)}.
+     */
     @Test
     public final void testAccepts()
     {
@@ -98,6 +121,10 @@ public class TokenTest {
 	}
     }
 
+    /**
+     * Test method for
+     * {@link com.github.roycetech.rule_engine.Token#accepts(List)}.
+     */
     @Test
     public final void testAccepts_converter()
     {
@@ -121,6 +148,10 @@ public class TokenTest {
 	}
     }
 
+    /**
+     * Test method for
+     * {@link com.github.roycetech.rule_engine.Token#toString()}.
+     */
     @Test
     public final void testToString()
     {

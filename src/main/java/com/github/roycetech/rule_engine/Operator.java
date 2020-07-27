@@ -4,8 +4,18 @@ import java.util.Locale;
 
 /** */
 public enum Operator {
-    /** */
-    NOT('!', Byte.MAX_VALUE), AND('&', (byte) 2), OR('|', (byte) 1);
+
+    /** rtfc. */
+    NOT('!', Byte.MAX_VALUE),
+    /**
+     * rtfc.
+     */
+    AND('&', (byte) 2),
+
+    /**
+     * rtfc.
+     */
+    OR('|', (byte) 1);
 
     /** */
     private final char symbol;

@@ -11,9 +11,9 @@ import java.util.StringTokenizer;
  * @author royce
  *
  */
-public final class ClauseTokenizer {
+public final class TokenizerUtil {
 
-    private ClauseTokenizer() {
+    private TokenizerUtil() {
     }
 
     /**
