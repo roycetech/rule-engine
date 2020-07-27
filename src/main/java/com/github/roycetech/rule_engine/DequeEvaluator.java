@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,11 +15,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.roycetech.converter.BoolConverter;
 import com.github.roycetech.converter.ElementConverter;
-import com.github.roycetech.converter.FloatConverter;
-import com.github.roycetech.converter.IntConverter;
-import com.github.roycetech.converter.StrConverter;
 
 /**
  * Helper class for RuleEvaluator.
@@ -45,20 +40,6 @@ public class DequeEvaluator {
      */
     private Deque<Object> stackAnswer;
 
-    /**
-     * Converters for the different supported data types.
-     */
-    private static final Map<Class<? extends Object>, ElementConverter> TYPE_CONVERTER;
-    static {
-	TYPE_CONVERTER = new HashMap<>();
-
-	TYPE_CONVERTER.put(Integer.class, new IntConverter());
-	TYPE_CONVERTER.put(Boolean.class, new BoolConverter());
-	TYPE_CONVERTER.put(String.class, new StrConverter());
-	TYPE_CONVERTER.put(Float.class, new FloatConverter());
-	// array handled especially
-    }
-
     DequeEvaluator(final Deque<Object> stackRPN,
 	    final Map<String, ElementConverter> tokenConverters) {
 
@@ -73,7 +54,7 @@ public class DequeEvaluator {
     Boolean evaluateOneRpn(final List<Object> scenario)
     {
 	final String single = this.stackRPN.peek().toString();
-	final ElementConverter converter = TYPE_CONVERTER
+	final ElementConverter converter = RuleEvaluator.TYPE_CONVERTER
 		.get(scenario.get(0).getClass());
 
 	final Token token = new Token(single);
@@ -163,7 +144,7 @@ public class DequeEvaluator {
 	    final String latest)
     {
 	final Token token = new Token(latest);
-	final ElementConverter converter = TYPE_CONVERTER
+	final ElementConverter converter = RuleEvaluator.TYPE_CONVERTER
 		.get(scenario.get(0).getClass());
 	return String.valueOf(!token.accepts(scenario, converter));
     }
