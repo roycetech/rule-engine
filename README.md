@@ -29,6 +29,9 @@ Preference was put on the LogicChecker example, available in another language.
 - Delete the version backup with `make version-commit`
 - Commit release version
 - Run deployment with: `make release`
+
+### Post Release process
+
 - Update versions to next snapshot version: `make version-set -DnewVersion=1.0.1-SNAPSHOT`
 - Commit new snapshot version
 - Develop, develop, develop and rinse and repeat

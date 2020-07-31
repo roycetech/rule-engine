@@ -17,9 +17,9 @@ public class RuleEngineException extends RuntimeException {
     }
 
     /**
-     * @param e the exception to wrap.
+     * @param exception the exception to wrap.
      */
-    public RuleEngineException(final Exception e) {
-	super(e);
+    public RuleEngineException(final Exception exception) {
+	super(exception);
     }
 }

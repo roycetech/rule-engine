@@ -17,12 +17,16 @@ import com.github.roycetech.rule_engine.RuleEngineException;
  */
 public class ReflectionHelper {
 
+    /**
+     * Target method to invoke.
+     */
     private final Method method;
 
     /**
-     * @param klass
-     * @param methodName
-     * @param parameterTypes
+     * @param klass          the class that has the method definition.
+     * @param methodName     the name of the method.
+     * @param parameterTypes the parameter array.
+     *
      */
     public ReflectionHelper(final Class<?> klass, final String methodName,
 	    final Class<?>... parameterTypes) {
@@ -37,10 +41,11 @@ public class ReflectionHelper {
      * Invokes the method with the arguments and returns the result or throws
      * the exception encountered during invocation.
      *
-     * @param <T>
-     * @param target where the method is to be invoked, null for static
+     * @param <T>    the type to use for casting the result.
+     *
+     * @param target where the method is to be invoked from, null for static
      *               invocation.
-     * @param args   arguments to the invocation.
+     * @param args   arguments used for the invocation.
      * @return the result of the invocation.
      */
     @SuppressWarnings("unchecked")

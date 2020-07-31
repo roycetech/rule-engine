@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.roycetech.converter.ElementConverter;
 import com.github.roycetech.rule_engine.utils.ReflectionHelper;
 
@@ -22,10 +19,6 @@ import com.github.roycetech.rule_engine.utils.ReflectionHelper;
  * @author royce
  */
 public class DequeEvaluator {
-
-    /** */
-    private static final Logger LOGGER = LoggerFactory
-	    .getLogger(DequeEvaluator.class);
 
     /** Token based converters */
     private final Map<String, ElementConverter> tokenConverters;
