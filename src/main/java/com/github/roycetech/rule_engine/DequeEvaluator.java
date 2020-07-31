@@ -4,8 +4,6 @@
 package com.github.roycetech.rule_engine;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -16,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.roycetech.converter.ElementConverter;
+import com.github.roycetech.rule_engine.utils.ReflectionHelper;
 
 /**
  * Helper class for RuleEvaluator.
@@ -166,23 +165,17 @@ public class DequeEvaluator {
 	final Token left = nextValue();
 	final Token right = nextValue();
 
-	try {
-	    final Class<?> tokenArray = Array.newInstance(Token.class, 0)
-		    .getClass();
+	final Class<?> tokenArray = Array.newInstance(Token.class, 0)
+		.getClass();
 
-	    final Method method = LogicHelper.class.getDeclaredMethod(
-		    "performLogical", List.class, tokenArray, Operator.class);
+	final ReflectionHelper reflect = new ReflectionHelper(LogicHelper.class,
+		"performLogical", List.class, tokenArray, Operator.class);
 
-	    final String answer = String.valueOf(method.invoke(null,
-		    formattedScenario, new Token[] { left, right
-		    }, operator));
+	final String answer = String.valueOf(reflect.<String>invoke(null,
+		formattedScenario, new Token[] { left, right
+		}, operator));
 
-	    this.stackAnswer.push(LogicHelper.formatInternalResult(answer));
-	} catch (final SecurityException | NoSuchMethodException
-		| IllegalArgumentException | IllegalAccessException
-		| InvocationTargetException e) {
-	    LOGGER.error(e.getMessage(), e);
-	}
+	this.stackAnswer.push(LogicHelper.formatInternalResult(answer));
     }
 
     /**

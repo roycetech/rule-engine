@@ -6,15 +6,12 @@
  */
 package com.github.roycetech.rule_engine;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.roycetech.rule_engine.utils.ReflectionHelper;
 
 /**
  * Internal refers to the string representation of the boolean values, signified
@@ -24,10 +21,6 @@ import org.slf4j.LoggerFactory;
  * @author royce
  */
 public final class LogicHelper {
-
-    /** */
-    private static final Logger LOGGER = LoggerFactory
-	    .getLogger(LogicHelper.class);
 
     /** Internal true result */
     static final String ITRUE = "*true";
@@ -77,7 +70,6 @@ public final class LogicHelper {
 	}
 
 	final String defaultReturn = Operator.AND == operation ? ITRUE : IFALSE;
-
 	if (left.equalsInternal(defaultReturn)) {
 	    return String.valueOf(right.accepts(scenario));
 	}
@@ -87,17 +79,11 @@ public final class LogicHelper {
 	}
 
 	final String methodName = "evaluate" + operation.toWord();
-	Method method;
-	try {
-	    method = LogicHelper.class.getDeclaredMethod(methodName, List.class,
-		    Token.class, Token.class);
-	    return method.invoke(null, scenario, left, right).toString();
-	} catch (NoSuchMethodException | SecurityException
-		| IllegalAccessException | IllegalArgumentException
-		| InvocationTargetException e) {
-	    LOGGER.error(e.getMessage(), e);
-	    return null;
-	}
+	final ReflectionHelper reflect = new ReflectionHelper(LogicHelper.class,
+		methodName, List.class, Token.class, Token.class);
+	reflect.forceAccess();
+
+	return reflect.invoke(null, scenario, left, right).toString();
     }
 
     /**
