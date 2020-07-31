@@ -6,7 +6,7 @@ A simple rule engine that can evaluate text expressions using the basic logic
 [![Build Status](https://travis-ci.com/roycetech/rule-engine.svg?branch=master)](https://travis-ci.com/roycetech/rule-engine)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/4dd9edeb10d81fee093d/test_coverage)](https://codeclimate.com/github/roycetech/rule-engine/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/4dd9edeb10d81fee093d/maintainability)](https://codeclimate.com/github/roycetech/rule-engine/maintainability)
-
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.roycetech.rule-engine/rule-engine.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.roycetech.rule-engine%22%20AND%20a:%22rule-engine%22)
 
 ### To build
 
@@ -32,7 +32,8 @@ Preference was put on the LogicChecker example, available in another language.
 
 ### Post Release process
 
-- Update versions to next snapshot version: `make version-set -DnewVersion=1.0.1-SNAPSHOT`
+- Update versions to next snapshot version: `make version-set VERSION=1.0.1-SNAPSHOT`
+- Delete the version backup with `make version-commit`
 - Commit new snapshot version
 - Develop, develop, develop and rinse and repeat
 
