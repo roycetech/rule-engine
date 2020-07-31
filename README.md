@@ -25,6 +25,8 @@ Preference was put on the LogicChecker example, available in another language.
 - Get the current version number with `make version-get` in preparation for
  updating.
 - Update versions to release version with `make version-set VERSION=1.0.0`
+- Verify the new version with `git diff`
+- Delete the version backup with `make version-commit`
 - Commit release version
 - Run deployment with: `make release`
 - Update versions to next snapshot version: `make version-set -DnewVersion=1.0.1-SNAPSHOT`
@@ -35,4 +37,4 @@ Preference was put on the LogicChecker example, available in another language.
 ### References
 
 - [Working with Apache Maven](https://central.sonatype.org/pages/apache-maven.html)
-- [Shunting Yard Algorith Wikipedia](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
+- [Shunting Yard Algorithm Wikipedia](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
