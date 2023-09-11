@@ -37,295 +37,251 @@ import utils.PrivateMethodInvoker;
 public class DequeEvaluatorTest {
 
 //    private static final String ORANGE = "orange";
-    private static final String APPLE = "apple";
+	private static final String APPLE = "apple";
 
-    /**
-     * Ignorable instances.
-     */
-    private static final Deque<Object> DUMMY_DEQUE = new ArrayDeque<>();
-    private static final List<Object> DUMMY_SCENARIO = new ArrayList<>();
-    private static final HashMap<String, ElementConverter> DUMMY_CONVERTERS = new HashMap<>();
+	/**
+	 * Ignorable instances.
+	 */
+	private static final Deque<Object> DUMMY_DEQUE = new ArrayDeque<>();
+	private static final List<Object> DUMMY_SCENARIO = new ArrayList<>();
+	private static final HashMap<String, ElementConverter> DUMMY_CONVERTERS = new HashMap<>();
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateOneRpn(java.util.List)}.
-     */
-    @Test
-    public final void testEvaluateOneRpn_coverage()
-    {
-	final Deque<Object> stackRPN = new ArrayDeque<>();
-	stackRPN.push(APPLE);
-	final DequeEvaluator subject = new DequeEvaluator(stackRPN, null);
-	assertTrue(subject.evaluateOneRpn(Arrays.asList(APPLE)));
-    }
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateOneRpn(java.util.List)}.
+	 */
+	@Test
+	public final void testEvaluateOneRpn_coverage()
+	{
+		final Deque<Object> stackRPN = new ArrayDeque<>();
+		stackRPN.push(APPLE);
+		final DequeEvaluator subject = new DequeEvaluator(stackRPN, null);
+		assertTrue(subject.evaluateOneRpn(Arrays.asList(APPLE)));
+	}
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiRpn(java.util.List)}.
-     */
-    @Test
-    public final void testEvaluateMultiRpn()
-    {
-	final Map<String, ElementConverter> tokenConverters = new HashMap<>();
-	tokenConverters.put("false", new BoolConverter());
-	tokenConverters.put("true", new BoolConverter());
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiRpn(java.util.List)}.
+	 */
+	@Test
+	public final void testEvaluateMultiRpn()
+	{
+		final Map<String, ElementConverter> tokenConverters = new HashMap<>();
+		tokenConverters.put("false", new BoolConverter());
+		tokenConverters.put("true", new BoolConverter());
 
-	final Deque<Object> stackRPN = new ArrayDeque<>();
-	stackRPN.add(String.valueOf(Operator.AND.getSymbol()));
-	stackRPN.add("true[1]");
-	stackRPN.add("true[0]");
+		final Deque<Object> stackRPN = new ArrayDeque<>(
+				Arrays.asList(String.valueOf(Operator.AND.getSymbol()), "true[1]", "true[0]"));
+		final DequeEvaluator subject = new DequeEvaluator(stackRPN, tokenConverters);
 
-	final DequeEvaluator subject = new DequeEvaluator(stackRPN,
-		tokenConverters);
+		assertFalse(subject.evaluateMultiRpn(Arrays.asList(false, false)));
+	}
 
-	assertFalse(subject.evaluateMultiRpn(Arrays.asList(false, false)));
-    }
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiRpn(java.util.List)}.
+	 */
+	@Test(expected = RuleEvaluatorException.class)
+	public final void testEvaluateMultiRpn_bad()
+	{
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiRpn(java.util.List)}.
-     */
-    @Test(expected = RuleEvaluatorException.class)
-    public final void testEvaluateMultiRpn_bad()
-    {
+		final Deque<Object> stackAnswer = new ArrayDeque<>(Arrays.asList("1", "2"));
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, DUMMY_CONVERTERS);
+		final DequeEvaluator spySubject = spy(subject);
 
-	final Deque<Object> stackAnswer = new ArrayDeque<>();
-	stackAnswer.add("1");
-	stackAnswer.add("2");
+		final List<Object> scenario = new ArrayList<>();
 
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_CONVERTERS);
-	final DequeEvaluator spySubject = spy(subject);
+		Mockito.doAnswer(new Answer<Object>() {
 
-	final List<Object> scenario = new ArrayList<>();
+			@Override
+			public Object answer(final InvocationOnMock invocation) throws Throwable
+			{
+				spySubject.setStackAnswer(stackAnswer);
+				return null;
+			}
+		}).when(spySubject).evaluateStackRpn(Mockito.<Deque<Object>>any(),
+				Mockito.<List<Object>>any());
 
-	Mockito.doAnswer(new Answer<Object>() {
+		spySubject.evaluateMultiRpn(scenario);
+	}
 
-	    @Override
-	    public Object answer(final InvocationOnMock invocation)
-		    throws Throwable
-	    {
-		spySubject.setStackAnswer(stackAnswer);
-		return null;
-	    }
-	}).when(spySubject).evaluateStackRpn(Mockito.<Deque<Object>>any(),
-		Mockito.<List<Object>>any());
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateOperator(java.util.List, char)}.
+	 *
+	 * Coverage test.
+	 */
+	@Test
+	public final void testEvaluateOperator_not()
 
-	spySubject.evaluateMultiRpn(scenario);
-    }
+	{
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, DUMMY_CONVERTERS);
+		final DequeEvaluator spySubject = spy(subject);
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateOperator(java.util.List, char)}.
-     *
-     * Coverage test.
-     */
-    @Test
-    public final void testEvaluateOperator_not()
+		Mockito.doNothing().when(spySubject).evaluateMultiNot(Mockito.<List<Object>>any());
 
-    {
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_CONVERTERS);
-	final DequeEvaluator spySubject = spy(subject);
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"evaluateOperator", List.class, Character.TYPE);
+		pmi.invoke(spySubject, DUMMY_SCENARIO, '!');
 
-	Mockito.doNothing().when(spySubject)
-		.evaluateMultiNot(Mockito.<List<Object>>any());
+		assertTrue(true);
+	}
 
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "evaluateOperator", List.class,
-		Character.TYPE);
-	pmi.invoke(spySubject, DUMMY_SCENARIO, '!');
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiNot(java.util.List)}.
+	 */
+	@Test
+	public final void testEvaluateMultiNot_internalFalse()
+	{
+		final Deque<Object> stackAnswers = new ArrayDeque<>();
+		stackAnswers.add("*true");
 
-	assertTrue(true);
-    }
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, DUMMY_CONVERTERS);
+		subject.setStackAnswer(stackAnswers);
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiNot(java.util.List)}.
-     */
-    @Test
-    public final void testEvaluateMultiNot_internalFalse()
-    {
-	final Deque<Object> stackAnswers = new ArrayDeque<>();
-	stackAnswers.add("*true");
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"evaluateMultiNot", List.class);
+		pmi.invoke(subject, DUMMY_SCENARIO);
 
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_CONVERTERS);
-	subject.setStackAnswer(stackAnswers);
+		assertEquals("*false", subject.getStackAnswer().peekLast());
+	}
 
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "evaluateMultiNot", List.class);
-	pmi.invoke(subject, DUMMY_SCENARIO);
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiNot(java.util.List)}.
+	 */
+	@Test
+	public final void testEvaluateMultiNot_internalTrue()
+	{
+		final Deque<Object> stackAnswers = new ArrayDeque<>();
+		stackAnswers.add("*false");
 
-	assertEquals("*false", subject.getStackAnswer().peekLast());
-    }
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, DUMMY_CONVERTERS);
+		subject.setStackAnswer(stackAnswers);
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiNot(java.util.List)}.
-     */
-    @Test
-    public final void testEvaluateMultiNot_internalTrue()
-    {
-	final Deque<Object> stackAnswers = new ArrayDeque<>();
-	stackAnswers.add("*false");
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"evaluateMultiNot", List.class);
+		pmi.invoke(subject, DUMMY_SCENARIO);
 
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_CONVERTERS);
-	subject.setStackAnswer(stackAnswers);
+		assertEquals("*true", subject.getStackAnswer().peekLast());
+	}
 
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "evaluateMultiNot", List.class);
-	pmi.invoke(subject, DUMMY_SCENARIO);
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiNot(java.util.List)}.
+	 */
+	@Test
+	public final void testEvaluateMultiNot_nonInternal()
+	{
+		final Map<String, ElementConverter> tokenConverters = new HashMap<>();
+		tokenConverters.put("false", new BoolConverter());
+		tokenConverters.put("true", new BoolConverter());
+		tokenConverters.put("basic", new StrConverter());
 
-	assertEquals("*true", subject.getStackAnswer().peekLast());
-    }
+		final Deque<Object> stackAnswers = new ArrayDeque<>(
+				Arrays.asList("*true", "false[1]", "basic"));
+		final DequeEvaluator subject = new DequeEvaluator(null, tokenConverters);
+		subject.setStackAnswer(stackAnswers);
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMultiNot(java.util.List)}.
-     */
-    @Test
-    public final void testEvaluateMultiNot_nonInternal()
-    {
-	final Map<String, ElementConverter> tokenConverters = new HashMap<>();
-	tokenConverters.put("false", new BoolConverter());
-	tokenConverters.put("true", new BoolConverter());
-	tokenConverters.put("basic", new StrConverter());
+		final List<Object> scenario = Arrays.asList(false, false, false, "basic");
 
-	final Deque<Object> stackAnswers = new ArrayDeque<>();
-	stackAnswers.add("*true");
-	stackAnswers.add("false[1]");
-	stackAnswers.add("basic");
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"evaluateMultiNot", List.class);
+		pmi.invoke(subject, scenario);
+		assertEquals("*false", subject.getStackAnswer().peekLast());
+	}
 
-	final DequeEvaluator subject = new DequeEvaluator(null,
-		tokenConverters);
-	subject.setStackAnswer(stackAnswers);
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateNonInternal(java.util.List, java.lang.String)}.
+	 *
+	 * Coverage test.
+	 */
+	@Test
+	public final void testEvaluateNonInternal()
+	{
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, DUMMY_CONVERTERS);
 
-	final List<Object> scenario = Arrays.asList(false, false, false,
-		"basic");
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"evaluateNonInternal", List.class, String.class);
 
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "evaluateMultiNot", List.class);
-	pmi.invoke(subject, scenario);
-	assertEquals("*false", subject.getStackAnswer().peekLast());
-    }
+		final String actual = pmi.<String>invoke(subject, Arrays.asList("right"), "wrong");
+		assertTrue(Boolean.valueOf(actual));
+	}
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateNonInternal(java.util.List, java.lang.String)}.
-     *
-     * Coverage test.
-     */
-    @Test
-    public final void testEvaluateNonInternal()
-    {
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_CONVERTERS);
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMulti(java.util.List, com.github.roycetech.rule_engine.Operator)}.
+	 *
+	 * Symbiotic test, Positive2.
+	 */
+	@Test
+	public final void testEvaluateMulti()
+	{
+		final Deque<Object> stackAnswers = new ArrayDeque<>(Arrays.asList("1", "999"));
+		final Map<String, ElementConverter> tokenConverters = new HashMap<>();
+		tokenConverters.put("1", new IntConverter());
+		tokenConverters.put("999", new IntConverter());
 
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "evaluateNonInternal", List.class,
-		String.class);
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, tokenConverters);
+		subject.setStackAnswer(stackAnswers);
 
-	final String actual = pmi.<String>invoke(subject,
-		Arrays.asList("right"), "wrong");
-	assertTrue(Boolean.valueOf(actual));
-    }
+		final List<Object> scenario = Arrays.asList("null");
 
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#evaluateMulti(java.util.List, com.github.roycetech.rule_engine.Operator)}.
-     *
-     * Symbiotic test, Positive2.
-     */
-    @Test
-    public final void testEvaluateMulti()
-    {
-	final Deque<Object> stackAnswers = new ArrayDeque<>();
-	stackAnswers.add("1");
-	stackAnswers.add("999");
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"evaluateMulti", List.class, Operator.class);
 
-	final Map<String, ElementConverter> tokenConverters = new HashMap<>();
-	tokenConverters.put("1", new IntConverter());
-	tokenConverters.put("999", new IntConverter());
+		pmi.invoke(subject, scenario, Operator.OR);
+		assertEquals("*false", subject.getStackAnswer().peekLast());
+	}
 
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		tokenConverters);
-	subject.setStackAnswer(stackAnswers);
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#nextValue()}.
+	 */
+	@Test
+	public final void testNextValue_array()
+	{
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, DUMMY_CONVERTERS);
+		final Object[] testArray = new Object[] { 1, 2 };
+		final Deque<Object> stackAnswers = new ArrayDeque<>(Arrays.asList("first", testArray));
+		subject.setStackAnswer(stackAnswers);
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"nextValue");
+		final Token token = pmi.<Token>invoke(subject);
+		assertEquals(testArray, token.getValue());
+	}
 
-	final List<Object> scenario = Arrays.asList("null");
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#nextValue()}.
+	 */
+	@Test
+	public final void testNextValue_internal()
+	{
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, DUMMY_CONVERTERS);
+		final Deque<Object> stackAnswers = new ArrayDeque<>(
+				Arrays.asList("first", LogicHelper.ITRUE));
+		subject.setStackAnswer(stackAnswers);
 
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "evaluateMulti", List.class,
-		Operator.class);
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"nextValue");
+		final Token token = pmi.<Token>invoke(subject);
+		assertEquals(LogicHelper.ITRUE, token.getValue());
+	}
 
-	pmi.invoke(subject, scenario, Operator.OR);
-	assertEquals("*false", subject.getStackAnswer().peekLast());
-    }
-
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#nextValue()}.
-     */
-    @Test
-    public final void testNextValue_array()
-    {
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_CONVERTERS);
-
-	final Deque<Object> stackAnswers = new ArrayDeque<>();
-	stackAnswers.add("first");
-
-	final Object[] testArray = new Object[] { 1, 2
-	};
-	stackAnswers.add(testArray);
-
-	subject.setStackAnswer(stackAnswers);
-
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "nextValue");
-	final Token token = pmi.<Token>invoke(subject);
-
-	assertEquals(testArray, token.getValue());
-    }
-
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#nextValue()}.
-     */
-    @Test
-    public final void testNextValue_internal()
-    {
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_CONVERTERS);
-
-	final Deque<Object> stackAnswers = new ArrayDeque<>();
-	stackAnswers.add("first");
-
-	stackAnswers.add(LogicHelper.ITRUE);
-
-	subject.setStackAnswer(stackAnswers);
-
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "nextValue");
-	final Token token = pmi.<Token>invoke(subject);
-
-	assertEquals(LogicHelper.ITRUE, token.getValue());
-    }
-
-    /**
-     * Test method for
-     * {@link com.github.roycetech.rule_engine.DequeEvaluator#nextValueDefault(java.lang.String)}.
-     */
-    @Test(expected = RuleEvaluatorException.class)
-    public final void testNextValueDefault_exception()
-    {
-	final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE,
-		DUMMY_CONVERTERS);
-
-	final PrivateMethodInvoker pmi = new PrivateMethodInvoker(
-		DequeEvaluator.class, "nextValueDefault", String.class);
-	pmi.invoke(subject, "test");
-    }
+	/**
+	 * Test method for
+	 * {@link com.github.roycetech.rule_engine.DequeEvaluator#nextValueDefault(java.lang.String)}.
+	 */
+	@Test(expected = RuleEvaluatorException.class)
+	public final void testNextValueDefault_exception()
+	{
+		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, DUMMY_CONVERTERS);
+		final PrivateMethodInvoker pmi = new PrivateMethodInvoker(DequeEvaluator.class,
+				"nextValueDefault", String.class);
+		pmi.invoke(subject, "test");
+	}
 
 }

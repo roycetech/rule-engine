@@ -11,15 +11,17 @@ package com.github.roycetech.rule_engine;
  */
 public class RuleEngineException extends RuntimeException {
 
-    /** @param string exception message. */
-    public RuleEngineException(final String string) {
-	super(string);
-    }
+	private static final long serialVersionUID = 4624495762307364549L;
 
-    /**
-     * @param exception the exception to wrap.
-     */
-    public RuleEngineException(final Exception exception) {
-	super(exception);
-    }
+	/** @param string exception message. */
+	public RuleEngineException(final String string) {
+		super(string);
+	}
+
+	/**
+	 * @param exception the exception to wrap.
+	 */
+	public RuleEngineException(final Exception exception) {
+		super(exception);
+	}
 }

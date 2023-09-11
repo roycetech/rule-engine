@@ -11,8 +11,8 @@
 
 	<name>rule-engine</name>
 	<description>
-	   A simple rule engine that can evaluate text expressions using the basic 
-	   logic operators 'and', 'or', 'not', and parenthesis.
+		A simple rule engine that can evaluate text expressions using the basic
+		logic operators 'and', 'or', 'not', and parenthesis.
 	</description>
 	<url>https://github.com/roycetech/rule-engine</url>
 
