@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.github.roycetech.converter.StrConverter;
+import com.github.roycetech.converter.StringConverter;
 
 /**
  * Test class for {@link com.github.roycetech.rule_engine.Token}.
@@ -138,7 +138,7 @@ public class TokenTest {
 	};
 	// @formatter:on
 
-	final StrConverter converter = new StrConverter();
+	final StringConverter converter = new StringConverter();
 	for (final Object[] objects : testData) {
 	    final Token sut = (Token) objects[0];
 	    final List<Object> scenario = Arrays.asList((Object[]) objects[1]);

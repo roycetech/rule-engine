@@ -15,12 +15,12 @@ public class DblConverterTest {
 
     /**
      * Test method for
-     * {@link com.github.roycetech.converter.DblConverter#convert(java.lang.String)}.
+     * {@link com.github.roycetech.converter.DoubleConverter#convert(java.lang.String)}.
      */
     @Test
     public final void testConvert_classOK()
     {
-	final Object actual = new DblConverter().convert("1");
+	final Object actual = new DoubleConverter().convert("1");
 	assertEquals(Double.class, actual.getClass());
     }
 

@@ -1,3 +1,5 @@
+CURRENT_BUILD=$(shell scripts/set_build_number.sh)
+
 help:
 	@echo "make -s init - initialize project"
 	@echo "make -s test - run unit tests"
@@ -19,12 +21,17 @@ test:
 run:
 	@echo run
 
+# version-get:
+# 	@mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate \
+# 		-Dexpression=project.version|grep -Ev '(^\[|Download\w+:)'
+
 version-get:
-	@mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate \
-		-Dexpression=project.version|grep -Ev '(^\[|Download\w+:)'
+	./scripts/set_build_number.sh
+
 
 version-set:
-	mvn versions:set -DnewVersion=${VERSION}
+# 	mvn versions:set -DnewVersion=${VERSION}
+	mvn versions:set -DnewVersion=${CURRENT_BUILD}
 
 version-commit:
     mvn versions:commit

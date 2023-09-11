@@ -9,7 +9,18 @@ import com.github.roycetech.rule_engine.LogicHelper;
 import com.github.roycetech.rule_engine.Operator;
 
 /**
- * Applies the shunting yard algorithm.
+ * The `Shunter` class applies the Shunting Yard algorithm for parsing and
+ * converting mathematical and logical expressions into Reverse Polish Notation
+ * (RPN).
+ *
+ * <p>
+ * It is used to handle the shunting yard algorithm, which is a method for
+ * parsing expressions specified in infix notation (e.g., 3 + 4) into Reverse
+ * Polish Notation (RPN) (e.g., 3 4 +).
+ *
+ * <p>
+ * The class manages two stacks: one for operators and one for the expression in
+ * RPN form.
  *
  * @author royce
  */
@@ -18,12 +29,15 @@ public class Shunter {
 	/** Temporary stack that holds operators, functions and brackets. */
 	private final Deque<Object> stackOperations;
 
-	/** Stack for holding expression converted to reversed polish notation. */
+	/** Stack for holding expressions converted to Reverse Polish Notation (RPN). */
 	private Deque<Object> stackRPN;
 
 	/**
-	 * @param stackOperations stack to hold the operators.
-	 * @param stackRPN        stack of the reverse polish notation.
+	 * Constructs a `Shunter` instance with the specified stacks.
+	 *
+	 * @param stackOperations The stack to hold operators, functions, and brackets.
+	 * @param stackRPN        The stack for holding expressions in Reverse Polish
+	 *                        Notation (RPN).
 	 */
 	public Shunter(final Deque<Object> stackOperations, final Deque<Object> stackRPN) {
 		this.stackOperations = stackOperations;
@@ -31,9 +45,10 @@ public class Shunter {
 	}
 
 	/**
-	 * For the Deque version, stackRPN has to be in reversed order already.
+	 * Performs the shunting yard algorithm on the provided token and updates the
+	 * stacks accordingly.
 	 *
-	 * @param token token on which to perform the shunting algorithm.
+	 * @param token The token to be processed by the shunting yard algorithm.
 	 */
 	public void shuntInternal(final Object token)
 	{
@@ -55,17 +70,29 @@ public class Shunter {
 		}
 	}
 
+	/**
+	 * Checks if there is only one remaining item in the RPN stack.
+	 *
+	 * @return `true` if there is only one remaining item in the RPN stack;
+	 *         otherwise, `false`.
+	 */
 	public boolean isOneRemaining()
 	{
 		return this.stackRPN.size() == 1;
 	}
 
+	/**
+	 * Clears both the operations and RPN stacks.
+	 */
 	public void clearStacks()
 	{
 		this.stackOperations.clear();
 		this.stackRPN.clear();
 	}
 
+	/**
+	 * Transfers all operations from the operations stack to the RPN stack.
+	 */
 	public void transferOperationsToRPN()
 	{
 		while (!this.stackOperations.isEmpty()) {
@@ -74,26 +101,41 @@ public class Shunter {
 	}
 
 	/**
-	 * @return the stackRPN. For testing purpose only.
+	 * Gets the RPN stack for testing purposes.
+	 *
+	 * @return The RPN stack.
 	 */
 	public Deque<Object> getStackRPN()
 	{
 		return stackRPN;
 	}
 
+	/**
+	 * Sets the RPN stack for testing purposes.
+	 *
+	 * @param stackRPN The RPN stack to set.
+	 */
 	public void setStackRPN(final Deque<Object> stackRPN)
 	{
 		this.stackRPN = stackRPN;
 	}
 
 	/**
-	 * @return the stackOperations. For testing purpose only.
+	 * Gets the operations stack for testing purposes.
+	 *
+	 * @return The operations stack.
 	 */
 	Deque<Object> getStackOperations()
 	{
 		return stackOperations;
 	}
 
+	/**
+	 * This method is used to handle closing brackets in the Shunting Yard
+	 * algorithm. The algorithm works by popping operators from the stack until an
+	 * opening bracket is found. This ensures that the operators are evaluated in
+	 * the correct order.
+	 */
 	private void shuntClose()
 	{
 		while (!this.stackOperations.isEmpty() && !LogicHelper
@@ -104,7 +146,9 @@ public class Shunter {
 	}
 
 	/**
-	 * @param token can be the traditional String or an array.
+	 * Handles the shunting of an operator token.
+	 *
+	 * @param token The operator token to be processed.
 	 */
 	private void shuntOperator(final Object token)
 	{

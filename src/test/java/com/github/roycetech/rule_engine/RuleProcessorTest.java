@@ -12,7 +12,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.github.roycetech.converter.BoolConverter;
+import com.github.roycetech.converter.BooleanConverter;
 import com.github.roycetech.converter.ElementConverter;
 
 /**
@@ -42,8 +42,8 @@ public class RuleProcessorTest {
 
 	final Rule rule = new Rule(outcomeClause);
 	final Map<String, ElementConverter> tokenConverters = new HashMap<>();
-	tokenConverters.put("false", new BoolConverter());
-	tokenConverters.put("true", new BoolConverter());
+	tokenConverters.put("false", new BooleanConverter());
+	tokenConverters.put("true", new BooleanConverter());
 
 	final List<Object> scenario = Arrays.asList(new Object[] { true, false
 	});
@@ -66,8 +66,8 @@ public class RuleProcessorTest {
 
 	final Rule rule = new Rule(outcomeClause);
 	final Map<String, ElementConverter> tokenConverters = new HashMap<>();
-	tokenConverters.put("false", new BoolConverter());
-	tokenConverters.put("true", new BoolConverter());
+	tokenConverters.put("false", new BooleanConverter());
+	tokenConverters.put("true", new BooleanConverter());
 
 	final List<Object> scenario = Arrays.asList(new Object[] { true, true
 	});

@@ -2,7 +2,7 @@ package com.github.roycetech.rule_engine;
 
 import java.util.Locale;
 
-/** */
+/** Represents the operator characters that can be used by this rule engine. */
 public enum Operator {
 
 	/** rtfc. */
@@ -41,7 +41,7 @@ public enum Operator {
 	 */
 	public static Operator fromChar(final char symbol)
 	{
-		for (final Operator nextOper : Operator.values()) {
+		for (final Operator nextOper : values()) {
 			if (symbol == nextOper.symbol) {
 				return nextOper;
 			}
@@ -57,7 +57,7 @@ public enum Operator {
 	 */
 	public static Operator fromString(final String operator)
 	{
-		for (final Operator nextOper : Operator.values()) {
+		for (final Operator nextOper : values()) {
 			if (operator.charAt(0) == nextOper.symbol) {
 				return nextOper;
 			}
@@ -66,7 +66,9 @@ public enum Operator {
 	}
 
 	/**
-	 * @return the precedence
+	 * Gets the value of its precedence.
+	 *
+	 * @return The current value of its precedence.
 	 */
 	public byte getPrecedence()
 	{
@@ -74,7 +76,9 @@ public enum Operator {
 	}
 
 	/**
-	 * @return the precedence
+	 * Gets the value of its symbol.
+	 *
+	 * @return The current value of its symbol.
 	 */
 	public char getSymbol()
 	{

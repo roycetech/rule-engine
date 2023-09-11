@@ -1,21 +1,21 @@
 package com.github.roycetech.converter;
 
 /**
- * Converts a string into a java float type.
+ * Converts a string into a java double type.
  */
-public class FloatConverter implements ElementConverter {
+public class DoubleConverter implements ElementConverter {
 
 	/**
 	 * Default constructor for the BooleanConverter class. This constructor is
 	 * provided by the compiler and requires no arguments.
 	 */
-	public FloatConverter() {
+	public DoubleConverter() {
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public Object convert(final String string)
 	{
-		return Float.parseFloat(string);
+		return Double.parseDouble(string);
 	}
 }

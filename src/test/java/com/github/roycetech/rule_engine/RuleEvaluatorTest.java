@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.github.roycetech.converter.BoolConverter;
+import com.github.roycetech.converter.BooleanConverter;
 import com.github.roycetech.converter.ElementConverter;
 
 /**
@@ -32,8 +32,8 @@ public class RuleEvaluatorTest {
 	public final void testParse_string()
 	{
 		final Map<String, ElementConverter> tokenConverter = new HashMap<>();
-		tokenConverter.put("false", new BoolConverter());
-		tokenConverter.put("true", new BoolConverter());
+		tokenConverter.put("false", new BooleanConverter());
+		tokenConverter.put("true", new BooleanConverter());
 
 		final RuleEvaluator sut = new RuleEvaluator(tokenConverter);
 		sut.parse("true[0]&true[1]");

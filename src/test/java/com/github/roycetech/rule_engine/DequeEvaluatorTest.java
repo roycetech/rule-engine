@@ -21,10 +21,10 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.github.roycetech.converter.BoolConverter;
+import com.github.roycetech.converter.BooleanConverter;
 import com.github.roycetech.converter.ElementConverter;
-import com.github.roycetech.converter.IntConverter;
-import com.github.roycetech.converter.StrConverter;
+import com.github.roycetech.converter.IntegerConverter;
+import com.github.roycetech.converter.StringConverter;
 
 import utils.PrivateMethodInvoker;
 
@@ -67,8 +67,8 @@ public class DequeEvaluatorTest {
 	public final void testEvaluateMultiRpn()
 	{
 		final Map<String, ElementConverter> tokenConverters = new HashMap<>();
-		tokenConverters.put("false", new BoolConverter());
-		tokenConverters.put("true", new BoolConverter());
+		tokenConverters.put("false", new BooleanConverter());
+		tokenConverters.put("true", new BooleanConverter());
 
 		final Deque<Object> stackRPN = new ArrayDeque<>(
 				Arrays.asList(String.valueOf(Operator.AND.getSymbol()), "true[1]", "true[0]"));
@@ -175,9 +175,9 @@ public class DequeEvaluatorTest {
 	public final void testEvaluateMultiNot_nonInternal()
 	{
 		final Map<String, ElementConverter> tokenConverters = new HashMap<>();
-		tokenConverters.put("false", new BoolConverter());
-		tokenConverters.put("true", new BoolConverter());
-		tokenConverters.put("basic", new StrConverter());
+		tokenConverters.put("false", new BooleanConverter());
+		tokenConverters.put("true", new BooleanConverter());
+		tokenConverters.put("basic", new StringConverter());
 
 		final Deque<Object> stackAnswers = new ArrayDeque<>(
 				Arrays.asList("*true", "false[1]", "basic"));
@@ -221,8 +221,8 @@ public class DequeEvaluatorTest {
 	{
 		final Deque<Object> stackAnswers = new ArrayDeque<>(Arrays.asList("1", "999"));
 		final Map<String, ElementConverter> tokenConverters = new HashMap<>();
-		tokenConverters.put("1", new IntConverter());
-		tokenConverters.put("999", new IntConverter());
+		tokenConverters.put("1", new IntegerConverter());
+		tokenConverters.put("999", new IntegerConverter());
 
 		final DequeEvaluator subject = new DequeEvaluator(DUMMY_DEQUE, tokenConverters);
 		subject.setStackAnswer(stackAnswers);
