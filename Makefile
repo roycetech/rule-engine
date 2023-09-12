@@ -37,7 +37,7 @@ version-commit:
     mvn versions:commit
 
 verify:
-	mvn verify -Dgpg.skip
+	mvn verify
 
 release:
 	mvn clean deploy -P release

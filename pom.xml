@@ -1,48 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.github.roycetech.rule-engine</groupId>
 	<artifactId>rule-engine</artifactId>
 	<version>1.0.0</version>
-
 	<name>rule-engine</name>
-	<description>
-		A simple rule engine that can evaluate text expressions using the basic
+	<description>A simple rule engine that can evaluate text expressions using the basic
 		logic operators 'and', 'or', 'not', and parenthesis.
 	</description>
 	<url>https://github.com/roycetech/rule-engine</url>
-
 	<licenses>
 		<license>
 			<name>Apache License 2.0</name>
 			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 		</license>
 	</licenses>
-
 	<developers>
 		<developer>
 			<name>Royce Remulla</name>
 			<email>royce.com@gmail.com</email>
 		</developer>
 	</developers>
-
 	<scm>
 		<connection>scm:git:git://github.com/roycetech/rule-engine.git</connection>
 		<developerConnection>scm:git:ssh://github.com:roycetech/rule-engine.git</developerConnection>
 		<url>https://github.com/roycetech/rule-engine/tree/master</url>
 	</scm>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<jacoco.version>0.8.5</jacoco.version>
 	</properties>
-
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -53,7 +42,6 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -61,21 +49,18 @@
 			<version>4.13.1</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>3.4.4</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.7</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -151,7 +136,7 @@
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.7</version>
+				<version>1.6.13</version>
 				<extensions>true</extensions>
 				<configuration>
 					<serverId>ossrh</serverId>
