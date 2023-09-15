@@ -77,12 +77,14 @@ public class RuleEvaluator {
 	public void parse(final Object expression)
 	{
 		this.shunter.clearStacks();
+		final Object sanitizedExpression = Rule.sanitize(expression);
 
 		final Object tokens;
 		if (expression.getClass().isArray()) {
 			tokens = expression;
+
 		} else {
-			tokens = TokenizerUtil.tokenize((String) expression, OPERATORS + "()");
+			tokens = TokenizerUtil.tokenize((String) sanitizedExpression, OPERATORS + "()");
 		}
 
 		for (final Object token : (Object[]) tokens) {
